@@ -19,7 +19,7 @@ O instalador adiciona um carregador isolado ao final do JavaScript nativo. Ele s
 - logo vetorial `MK-AUTH / VPS CLOUD` com o símbolo oficial de conexões da Network Consulting;
 - assinatura visual `VPS CLOUD / Network Consulting`;
 - marca e logo clicáveis para `https://vpscloud.net.br/`;
-- link “Empresa”;
+- link “VPS CLOUD - Network Consulting” para o site da empresa;
 - link “MK-Auth em Cloud”;
 - direitos autorais “Bruno Fontes - Network Consulting”;
 - botão “Central do assinante” apontando para `/central`;

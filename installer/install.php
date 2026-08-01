@@ -94,7 +94,7 @@ if (strpos($contents, $marker) === false) {
   }
   if (!document.querySelector('script[data-vpscloud-login]')) {
     var script = document.createElement('script');
-    script.src = 'scripts/vpscloud-login.js?v=20260801-4';
+    script.src = 'scripts/vpscloud-login.js?v=20260801-5';
     script.defer = true;
     script.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(script);
@@ -113,7 +113,7 @@ JS;
     );
     $updated = preg_replace(
         "/vpscloud-login\\.js\\?v=[0-9-]+/",
-        'vpscloud-login.js?v=20260801-4',
+        'vpscloud-login.js?v=20260801-5',
         $updated
     );
 
