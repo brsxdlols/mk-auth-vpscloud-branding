@@ -2,6 +2,16 @@
 
 Pacote de personalização da tela de login e da Central do Assinante do MK-Auth, validado em ambiente de homologação em 01/08/2026.
 
+## Instalação automática
+
+Execute como `root` no servidor MK-Auth:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/brsxdlols/mk-auth-vpscloud-branding/main/install.sh | sh
+```
+
+O instalador baixa a versão mais recente, aplica o login personalizado, instala o tema da Central do Assinante e configura autenticação por CPF.
+
 ## Diagnóstico
 
 - Página de login principal: `/opt/mk-auth/admin/login.hhvm`.
