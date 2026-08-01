@@ -105,6 +105,21 @@ JS;
     if (file_put_contents($nativeJs, $contents . $loader) === false) exit(1);
     chmod($nativeJs, 0644);
     echo "Backup criado: $backup\n";
+} else {
+    $updated = preg_replace(
+        "/vpscloud-login\\.css\\?v=[0-9-]+/",
+        'vpscloud-login.css?v=20260801-5',
+        $contents
+    );
+    $updated = preg_replace(
+        "/vpscloud-login\\.js\\?v=[0-9-]+/",
+        'vpscloud-login.js?v=20260801-4',
+        $updated
+    );
+
+    if ($updated === null || file_put_contents($nativeJs, $updated) === false) exit(1);
+    chmod($nativeJs, 0644);
+    echo "Loader VPS CLOUD atualizado.\n";
 }
 
 echo "Identidade MK-AUTH VPS CLOUD instalada.\n";
