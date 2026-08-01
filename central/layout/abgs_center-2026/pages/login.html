@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Central do Assinante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9', // Sky 500
+                600: '#0284c7', // Sky 600
+                700: '#0369a1', // Sky 700
+                900: '#0c4a6e', // Sky 900
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Dummy ID for mk-auth.js backward compatibility if needed -->
+    <link id="theme" href="#" rel="stylesheet" disabled style="display: none" />
+
+    <style>
+      body {
+        font-family: 'Outfit', sans-serif;
+        background-color: #0f172a; /* Slate 900 */
+        background-image: radial-gradient(
+            at 0% 0%,
+            hsla(253, 16%, 7%, 1) 0,
+            transparent 50%
+          ),
+          radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+          radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex items-center justify-center p-4 text-slate-200"
+  >
+    <div class="w-full max-w-md w-full">
+      <!-- Header / Brand -->
+      <div class="text-center mb-8">
+        <div class="inline-block p-4 rounded-full glass-panel mb-4 shadow-2xl">
+          <!-- Using MK-AUTH Logo Variable -->
+          <img
+            src="../mkfiles/logo.jpg"
+            alt="Logo"
+            class="h-12 w-auto object-contain brightness-110 contrast-125"
+          />
+        </div>
+        <h1 class="text-2xl font-bold text-white tracking-tight">
+          Central do Assinante
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">
+          Bem-vindo ao seu portal de autoatendimento
+        </p>
+      </div>
+
+      <!-- Main Card -->
+      <div
+        class="glass-panel rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden"
+      >
+        <!-- Decorator -->
+        <div
+          class="absolute -top-10 -right-10 w-32 h-32 bg-brand-500 rounded-full blur-3xl opacity-20 pointer-events-none"
+        ></div>
+        <div
+          class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500 rounded-full blur-3xl opacity-20 pointer-events-none"
+        ></div>
+
+        <!-- BEGIN BLOCK_PAGESENHA -->
+        <!-- Password Recovery Mode -->
+        <div class="relative z-10">
+          <h2 class="text-xl font-semibold text-white mb-6">Recuperar Senha</h2>
+
+          <form
+            action="./executar_senha.hhvm"
+            method="POST"
+            id="central_login"
+            class="space-y-5"
+          >
+            <div>
+              <label
+                for="txt_login"
+                class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1"
+                >Login ou CPF</label
+              >
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                    />
+                    <path
+                      d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="txt_login"
+                  name="login"
+                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  placeholder="Digite seu login ou CPF"
+                />
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                id="btn_submit"
+                name="btn_submit"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-brand-500 transition-all transform hover:scale-[1.02]"
+              >
+                Enviar Solicitação
+              </button>
+            </div>
+
+            <div class="text-center mt-4">
+              <a
+                href="login.hhvm"
+                class="text-sm text-slate-400 hover:text-white transition-colors"
+                >Voltar para o Login</a
+              >
+            </div>
+          </form>
+        </div>
+        <!-- END BLOCK_PAGESENHA -->
+
+        <!-- BEGIN BLOCK_PAGEDEFAULT -->
+        <!-- Standard Login Mode -->
+        <div class="relative z-10">
+          <form
+            action="./executar_login.hhvm"
+            method="POST"
+            id="central_login"
+            class="space-y-5"
+          >
+            {CSRF}
+
+            <!-- BEGIN BLOCK_CAMPOLOGIN -->
+            <div>
+              <label
+                for="txt_login"
+                class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1"
+                >Login</label
+              >
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="txt_login"
+                  name="txt_login"
+                  value="{POST_LOGIN}"
+                  autofocus
+                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  placeholder="Seu usuário"
+                />
+              </div>
+            </div>
+            <!-- END BLOCK_CAMPOLOGIN -->
+
+            <!-- BEGIN BLOCK_CAMPOCPF -->
+            <div>
+              <label
+                for="txt_cpf"
+                class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1"
+                >CPF / CNPJ</label
+              >
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="txt_cpf"
+                  name="txt_cpf"
+                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  placeholder="000.000.000-00"
+                />
+              </div>
+            </div>
+            <!-- END BLOCK_CAMPOCPF -->
+
+            <!-- BEGIN BLOCK_CAMPOSENHA -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label
+                  for="txt_senha"
+                  class="block text-xs font-medium text-slate-400 uppercase tracking-wider"
+                  >Senha</label
+                >
+              </div>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="password"
+                  id="txt_senha"
+                  name="txt_senha"
+                  value="{POST_SENHA}"
+                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                  placeholder="Sua senha"
+                />
+              </div>
+            </div>
+            <!-- END BLOCK_CAMPOSENHA -->
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                id="btn_submit"
+                name="btn_submit"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-brand-500 transition-all transform hover:scale-[1.02]"
+              >
+                Acessar Central
+              </button>
+            </div>
+          </form>
+
+          <!-- BEGIN BLOCK_CAMPOLEMBRAR -->
+          <div class="mt-6 flex flex-col items-center">
+            <div class="relative w-full flex items-center py-2">
+              <div class="flex-grow border-t border-slate-700"></div>
+              <span class="flex-shrink-0 mx-4 text-slate-500 text-xs uppercase"
+                >ou</span
+              >
+              <div class="flex-grow border-t border-slate-700"></div>
+            </div>
+            <button
+              type="button"
+              id="btn_senha"
+              name="btn_senha"
+              class="mt-2 text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors focus:outline-none hover:underline"
+            >
+              Esqueci minha senha
+            </button>
+          </div>
+          <!-- END BLOCK_CAMPOLEMBRAR -->
+        </div>
+        <!-- END BLOCK_PAGEDEFAULT -->
+      </div>
+
+      <!-- Footer Info -->
+      <div class="text-center mt-8 text-slate-500 text-xs">
+        <p>
+          &copy; {ANO_ATUAL} Central do Assinante. Todos os direitos reservados.<br>
+        </p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/jquery.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/sweetalert2.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/utils.js"></script>
+    <!-- Removed Old Bootstrap/Vendor JS to clean up, keeping jQuery for legacy scripts if needed -->
+    <!-- app.js excluded to avoid conflicts with new UI, unless specific logic is needed -->
+
+    <script>
+      // Include minimal logic required for the form
+      jQuery('#btn_submit').click(function (e) {
+        // Prevent default if it's not a submit button (though it is type=submit)
+        // Check if there is specific logic in old files. The old file just submitted content.
+        // $("#central_login").submit(); // Default behavior of type=submit button inside form is to submit.
+        // We will keep the Click handler just in case mk-auth relies on it for some reason,
+        // but normally type="submit" handles it.
+        // Force submit ensuring it targets the form ID
+        // e.preventDefault(); // Optional, but let's let natural submit work or explicit submit
+      });
+
+      // Enviar senha redirect
+      jQuery('#btn_senha').click(function (e) {
+        e.preventDefault();
+        window.location.href = 'login.hhvm?page=senha';
+      });
+    </script>
+  </body>
+</html>

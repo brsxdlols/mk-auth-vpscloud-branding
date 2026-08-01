@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Central do Assinante - Enviar Comprovante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="manifest" href="./layout/{CENTRAL_TEMPLATE}/manifest.json">
+    <link rel="apple-touch-icon" href="./layout/{CENTRAL_TEMPLATE}/images/icon-192.png">
+
+    <!-- PWA Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./layout/{CENTRAL_TEMPLATE}/sw.js')
+            .then(reg => console.log('PWA carregado'))
+            .catch(err => console.log('Erro PWA', err));
+        });
+      }
+    </script>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                900: '#0c4a6e',
+              },
+              dark: {
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      .glass-header {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar-link {
+        transition: all 0.2s;
+      }
+      .sidebar-link:hover,
+      .sidebar-link.active {
+        background: rgba(14, 165, 233, 0.1);
+        color: #38bdf8;
+        border-right: 3px solid #0ea5e9;
+      }
+
+      /* Form Controls */
+      .form-input {
+        width: 100%;
+        background-color: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        color: #e2e8f0;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        background-color: rgba(30, 41, 59, 0.8);
+      }
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+      }
+      html, body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-dark-900 text-slate-300 font-sans antialiased"
+  >
+    <div class="flex min-h-screen w-full">
+      <!-- Sidebar (Desktop) -->
+      <aside
+        class="hidden md:flex flex-col w-64 bg-dark-950 border-r border-slate-800/50 md:fixed md:top-0 md:left-0 md:bottom-0 md:h-screen md:z-10"
+      >
+        <div class="h-16 flex items-center px-6 border-b border-slate-800/50">
+          <span class="text-xl font-bold text-white tracking-tight"
+            ><span class="text-brand-500">Central</span> Assinante</span
+          >
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-4 space-y-1">
+          <p
+            class="px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-2"
+          >
+            Principal
+          </p>
+
+          <a
+            href="./index.hhvm"
+            class="sidebar-link flex items-center px-6 py-3 text-sm font-medium border-r-2 border-transparent text-slate-400 hover:text-white"
+          >
+            <i class="bi bi-grid-fill text-lg mr-3"></i> Início
+          </a>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-person-fill text-lg mr-3"></i> Meus Dados</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./atualizar_dados.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Atualizar Dados</a
+              >
+              <!-- BEGIN BLOCK_MENUSENHA -->
+              <a
+                href="./trocar_senha.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Trocar Senha</a
+              >
+              <!-- END BLOCK_MENUSENHA -->
+              <a
+                href="./foto.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Trocar Foto</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-white transition-colors"
+            >
+              <!-- Active State for Financeiro -->
+              <span class="flex items-center text-brand-500"
+                ><i class="bi bi-wallet-fill text-lg mr-3"></i> Financeiro</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENU2VIA -->
+              <a
+                href="./2_via.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >2ª Via Boleto</a
+              >
+              <!-- END BLOCK_MENU2VIA -->
+              <a
+                href="./servicos.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Serviços</a
+              >
+              <a
+                href="./faturas.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Histórico Faturas</a
+              >
+              <a
+                href="./comprovante.hhvm"
+                class="block py-2 text-sm text-brand-400 font-medium"
+                >Comprovantes</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-globe2 text-lg mr-3"></i> Conexão</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./relatorio.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Relatório de Uso</a
+              >
+              <!-- BEGIN BLOCK_MENUDISCO -->
+              <a
+                href="./disco_virtual.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Disco Virtual</a
+              >
+              <!-- END BLOCK_MENUDISCO -->
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-headset text-lg mr-3"></i> Suporte</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENUCHAMADOS -->
+              <a
+                href="./suporte.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Chamados</a
+              >
+              <!-- END BLOCK_MENUCHAMADOS -->
+              <a
+                href="./downloads.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Downloads</a
+              >
+              <!-- BEGIN BLOCK_MENUFALE -->
+              <a
+                href="./fale_conosco.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Fale Conosco</a
+              >
+              <!-- END BLOCK_MENUFALE -->
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-800/50">
+          <a
+            href="./executar_central.hhvm?acao=sair"
+            class="flex items-center justify-center w-full py-2 px-4 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-colors text-sm font-medium"
+          >
+            <i class="bi bi-box-arrow-right mr-2"></i> Sair do Sistema
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main
+        class="flex-1 flex flex-col relative bg-dot-pattern overflow-x-hidden md:ml-64"
+      >
+        <!-- Mobile Header -->
+        <header
+          class="glass-header h-16 flex items-center justify-between px-4 md:px-8 z-20 sticky top-0"
+        >
+          <div class="flex items-center md:hidden">
+            <button
+              id="mobile-menu-btn"
+              class="text-slate-300 hover:text-white p-2"
+            >
+              <i class="bi bi-list text-2xl"></i>
+            </button>
+            <span class="ml-3 text-lg font-bold text-white">Comprovantes</span>
+          </div>
+
+          <!-- Desktop Left Info -->
+          <div class="hidden md:flex items-center space-x-4">
+            <div
+              class="h-8 w-8 rounded bg-slate-800 p-1 flex items-center justify-center"
+            >
+              <img
+                src="../mkfiles/logo.jpg"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white">{PROVEDOR_NOME}</h2>
+              <p class="text-xs text-slate-500">Painel de Controle</p>
+            </div>
+          </div>
+
+          <!-- Right Actions -->
+          <div class="flex items-center space-x-4">
+            <!-- Notification Bell -->
+            <div class="relative group">
+              <button
+                class="p-2 text-slate-400 hover:text-white transition-colors relative"
+              >
+                <i class="bi bi-bell text-xl"></i>
+                <span
+                  class="absolute top-1 right-1 h-4 w-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white font-bold"
+                  >{TOTAL_AVISOS}</span
+                >
+              </button>
+
+              <!-- Dropdown Notifications -->
+              <div
+                class="absolute right-0 top-full mt-2 w-72 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform translate-y-2 group-hover:translate-y-0"
+              >
+                <div
+                  class="p-3 border-b border-slate-700 font-semibold text-sm text-white"
+                >
+                  Avisos e Notificações
+                </div>
+                <div class="max-h-64 overflow-y-auto">
+                  <ul class="py-1">
+                    <!-- BEGIN BLOCK_DADOSAVISOS -->
+                    <li>
+                      <a
+                        href="{CLIENTE_AVISO_LINK}"
+                        class="block px-4 py-3 hover:bg-slate-700/50 transition-colors"
+                      >
+                        <p class="text-sm text-slate-200 line-clamp-2">
+                          {CLIENTE_AVISO_MSG}
+                        </p>
+                      </a>
+                    </li>
+                    <!-- END BLOCK_DADOSAVISOS -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex items-center pl-4 border-l border-slate-800">
+              <div class="text-right mr-3 hidden md:block">
+                <p class="text-sm font-medium text-white">{CLIENTE_NOME_RES}</p>
+                <p class="text-xs text-slate-500">Assinante</p>
+              </div>
+              <div
+                class="h-10 w-10 rounded-full bg-slate-700 p-0.5 ring-2 ring-slate-800 cursor-pointer overflow-hidden"
+              >
+                <img
+                  src="../mkfiles/{CLIENTE_FOTO}"
+                  class="h-full w-full rounded-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="p-4 md:p-8">
+          <div class="max-w-4xl mx-auto space-y-8 pb-20">
+            <!-- Page Header -->
+            <div>
+              <h1 class="text-2xl font-bold text-white tracking-tight">
+                Envio de Comprovantes
+              </h1>
+              <p class="text-slate-400 text-sm mt-1">
+                Envie o comprovante de pagamento das suas faturas em aberto.
+              </p>
+            </div>
+
+            <!-- UPLOAD VIEW -->
+            <!-- BEGIN BLOCK_PAGECONFIRMAR -->
+            <div
+              class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm p-6 md:p-8"
+            >
+              <h3
+                class="text-lg font-bold text-white mb-6 border-b border-slate-800 pb-2 flex items-center"
+              >
+                <i class="bi bi-cloud-upload text-brand-500 mr-2"></i> Enviar
+                Comprovante
+              </h3>
+              <form
+                action="executar_central.hhvm?acao=comprovante"
+                method="post"
+                enctype="multipart/form-data"
+                name="form"
+                id="form"
+                class="space-y-6"
+              >
+                <div
+                  class="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm mb-4"
+                >
+                  <i class="bi bi-info-circle-fill mr-2"></i> Selecione o
+                  arquivo do comprovante ou uma foto legível.
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="form-label">Arquivo do Comprovante</label>
+                    <input
+                      name="txt_arquivo"
+                      type="file"
+                      id="txt_arquivo"
+                      class="w-full text-slate-400 text-sm bg-slate-800/50 rounded-lg p-3 border border-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="form-label"
+                      >Mensagem / Observação (Opcional)</label
+                    >
+                    <textarea
+                      name="txt_msg"
+                      id="txt_msg"
+                      rows="3"
+                      class="form-input"
+                      placeholder="Alguma observação sobre este pagamento?"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div
+                  class="flex justify-end gap-4 pt-4 border-t border-slate-800"
+                >
+                  <a
+                    href="comprovante.hhvm"
+                    class="px-6 py-3 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition-all text-sm font-bold"
+                    >Cancelar</a
+                  >
+                  <input
+                    name="uuid_lanc"
+                    type="hidden"
+                    id="uuid_lanc"
+                    value="{UUID_LANC}"
+                  />
+                  <input
+                    name="txt_titulo"
+                    type="hidden"
+                    id="txt_titulo"
+                    value="{ID_TITULO}"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-green-500/20 transition-all transform hover:scale-[1.02] flex items-center"
+                  >
+                    <i class="bi bi-send mr-2"></i> Enviar Comprovante
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- END BLOCK_PAGECONFIRMAR -->
+
+            <!-- INVOICE LIST VIEW -->
+            <!-- BEGIN BLOCK_PAGEDEFAULT -->
+            <div
+              class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm"
+            >
+              <div class="p-6 border-b border-slate-800 bg-slate-800/20">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                  <i class="bi bi-receipt text-yellow-500 mr-2"></i> Faturas em
+                  Aberto
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">
+                  Selecione a fatura para qual deseja enviar o comprovante.
+                </p>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead
+                    class="bg-slate-900/50 text-slate-400 text-xs uppercase font-semibold"
+                  >
+                    <tr>
+                      <th class="p-4 w-24">Fatura</th>
+                      <th class="p-4 text-left">Valor</th>
+                      <th class="p-4">Vencimento</th>
+                      <th class="p-4 text-center">Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    class="divide-y divide-slate-700/50 text-sm text-slate-300"
+                  >
+                    <!-- BEGIN BLOCK_FATURAS -->
+                    <!-- BEGIN BLOCK_DADOSFATURAS -->
+                    <tr class="hover:bg-slate-700/30 transition-colors group">
+                      <td class="p-4 font-mono text-white font-bold">
+                        #{FATURA_ID}
+                      </td>
+                      <td class="p-4 font-bold text-green-400">
+                        R$ {FATURA_VALOR}
+                      </td>
+                      <td class="p-4 text-slate-300">{FATURA_VENCIMENTO}</td>
+                      <td class="p-4 text-center">
+                        <a
+                          href="comprovante.hhvm?page=confirmar&uuid={FATURA_UUID}"
+                          class="inline-flex items-center px-4 py-2 bg-brand-600/10 hover:bg-brand-600 text-brand-400 hover:text-white border border-brand-600/30 rounded-lg transition-all text-xs font-bold uppercase tracking-wide shadow-sm hover:shadow-brand-500/20"
+                        >
+                          <i class="bi bi-cloud-upload mr-2"></i> Enviar
+                        </a>
+                      </td>
+                    </tr>
+                    <!-- END BLOCK_DADOSFATURAS -->
+                    <!-- END BLOCK_FATURAS -->
+
+                    <!-- Placeholder if empty (Handled by backend usually, but structure holds) -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="p-4 bg-slate-800/30 text-xs text-center text-slate-500"
+              >
+                Caso sua fatura não esteja listada, verifique em
+                <a
+                  href="faturas.hhvm"
+                  class="text-brand-400 hover:text-brand-300 hover:underline"
+                  >Histórico de Faturas</a
+                >.
+              </div>
+            </div>
+            <!-- END BLOCK_PAGEDEFAULT -->
+
+            <!-- Footer -->
+            <footer class="mt-auto border-t border-slate-800/50 pt-12 pb-10 bg-black/10">
+              <div
+                class="flex flex-col md:flex-row justify-between items-center gap-4"
+              >
+                <!-- Social Links -->
+                                <div class="flex flex-wrap justify-center gap-3 redes-sociais">
+                  <a href="{INSTAGRAM}" target="_blank" id="instagram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-500 hover:text-white transition-all"><i class="bi bi-instagram"></i></a>
+                  <a href="{WHATSAPP}" target="_blank" id="whatsapp" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-green-500 hover:text-white transition-all"><i class="bi bi-whatsapp"></i></a>
+                  <a href="{TIKTOK}" target="_blank" id="tiktok" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all"><i class="bi bi-tiktok"></i></a>
+                  <a href="{TWITTER}" target="_blank" id="twitter" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-500 hover:text-white transition-all"><i class="bi bi-twitter"></i></a>
+                  <a href="{FACEBOOK}" target="_blank" id="facebook" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="bi bi-facebook"></i></a>
+                  <a href="{LINKEDIN}" target="_blank" id="linkedin" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-700 hover:text-white transition-all"><i class="bi bi-linkedin"></i></a>
+                  <a href="{YOUTUBE}" target="_blank" id="youtube" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-red-600 hover:text-white transition-all"><i class="bi bi-youtube"></i></a>
+                  <a href="{TELEGRAM}" target="_blank" id="telegram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-400 hover:text-white transition-all"><i class="bi bi-telegram"></i></a>
+                  <a href="{SKYPE}" target="_blank" id="skype" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-500 hover:text-white transition-all"><i class="bi bi-skype"></i></a>
+                  <a href="{KWAI}" target="_blank" id="kwai" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-500 hover:text-white transition-all"><i class="bi bi-camera-reels-fill"></i></a>
+                </div>
+
+                <div class="text-center md:text-right text-xs text-slate-500">
+                  <p>
+                    &copy; {ANO_ATUAL} - {PROVEDOR_NOME} - Todos os direitos
+                    reservados.<br>
+                  </p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/jquery.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/sweetalert2.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/mk-auth.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/utils.js"></script>
+    <script>
+      // Use jQuery for compatibility + Tailwind Interactivity
+
+      $(document).ready(function () {
+        // -- MOBILE MENU (OVERLAY) --
+        const $sidebar = $('aside');
+        const $mobileBtn = $('#mobile-menu-btn');
+        
+        // 1. Injetar Backdrop e Botão de Fechar se não existirem
+        if ($('#mobile-backdrop').length === 0) {
+          $('body').append('<div id="mobile-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>');
+        }
+        const $backdrop = $('#mobile-backdrop');
+
+        if ($sidebar.find('#mobile-close-btn').length === 0) {
+          const $header = $sidebar.find('> div').first();
+          $header.addClass('justify-between');
+          $header.append(`
+            <button id="mobile-close-btn" class="md:hidden text-slate-400 hover:text-white p-2">
+              <i class="bi bi-x-lg text-lg"></i>
+            </button>
+          `);
+        }
+
+        // 2. Função de Toggle
+        function toggleMobileSidebar(show) {
+          if (show) {
+            $sidebar.removeClass('hidden').addClass('flex fixed inset-y-0 left-0 z-50 w-72 bg-dark-950 shadow-2xl transform -translate-x-full transition-transform duration-300');
+            $backdrop.removeClass('hidden');
+            setTimeout(() => {
+              $sidebar.removeClass('-translate-x-full').addClass('translate-x-0');
+              $backdrop.addClass('opacity-100').removeClass('opacity-0');
+            }, 10);
+            $('body, html').addClass('overflow-hidden h-full fixed w-full');
+          } else {
+            $sidebar.removeClass('translate-x-0').addClass('-translate-x-full');
+            $backdrop.removeClass('opacity-100').addClass('opacity-0');
+            setTimeout(() => {
+              $sidebar.addClass('hidden').removeClass('flex fixed inset-y-0 left-0 z-50 w-72 transform translate-x-0 -translate-x-full');
+              $backdrop.addClass('hidden');
+              $('body, html').removeClass('overflow-hidden h-full fixed w-full');
+            }, 300);
+          }
+        }
+
+        $mobileBtn.on('click', function (e) {
+          e.stopPropagation();
+          toggleMobileSidebar(true);
+        });
+
+        $(document).on('click', '#mobile-close-btn, #mobile-backdrop', function () {
+          toggleMobileSidebar(false);
+        });
+
+        // 3. Submenus Desktop (Corrigir problema de "Todos Abertos")
+        const $submenus = $sidebar.find('.group .bg-slate-900\\/50');
+        $submenus.hide();
+
+        $sidebar.find('.group > button').on('click', function () {
+          const $thisMenu = $(this).next('.bg-slate-900\\/50');
+          const $icon = $(this).find('.bi-chevron-down');
+          $thisMenu.slideToggle(200);
+          if ($icon.length) {
+            $icon.toggleClass('rotate-180');
+          }
+        });
+
+        // 5. Active State Persistence
+        var pathName = window.location.pathname.split('/').pop();
+        if (pathName === '' || pathName === 'central') pathName = 'index.hhvm';
+
+        $sidebar.find('a').each(function () {
+          var href = $(this).attr('href');
+          if (!href) return;
+          var cleanHref = href.replace('./', '');
+
+          if (pathName.indexOf(cleanHref) > -1) {
+            $(this)
+              .addClass('text-brand-400 font-medium')
+              .removeClass('text-slate-400');
+
+            var $parentMenu = $(this).closest('.bg-slate-900\\/50');
+            if ($parentMenu.length) {
+              $parentMenu.show();
+              $parentMenu
+                .prev('button')
+                .find('.bi-chevron-down')
+                .addClass('rotate-180');
+              $parentMenu
+                .prev('button')
+                .addClass('text-brand-500')
+                .removeClass('text-slate-400');
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

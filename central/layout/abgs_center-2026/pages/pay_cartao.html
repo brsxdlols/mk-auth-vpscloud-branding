@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="manifest" href="./layout/{CENTRAL_TEMPLATE}/manifest.json">
+    <link rel="apple-touch-icon" href="./layout/{CENTRAL_TEMPLATE}/images/icon-192.png">
+
+    <!-- PWA Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./layout/{CENTRAL_TEMPLATE}/sw.js')
+            .then(reg => console.log('PWA carregado'))
+            .catch(err => console.log('Erro PWA', err));
+        });
+      }
+    </script>
+    <title>Processando Pagamento</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9' }, dark: { 900: '#0f172a' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-900 text-white flex items-center justify-center min-h-screen flex-col">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-brand-500 border-opacity-75 mb-6"></div>
+    <h1 class="text-xl font-semibold tracking-wide">Redirecionando para o Pagamento...</h1>
+    <p class="text-slate-400 text-sm mt-2">Aguarde um momento enquanto conectamos ao provedor financeiro.</p>
+<script src="./layout/{CENTRAL_TEMPLATE}/js/mk-auth.js"></script>
+</body>
+</html>

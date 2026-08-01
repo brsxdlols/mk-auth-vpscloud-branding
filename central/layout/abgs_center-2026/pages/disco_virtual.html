@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Central do Assinante - Disco Virtual</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="manifest" href="./layout/{CENTRAL_TEMPLATE}/manifest.json">
+    <link rel="apple-touch-icon" href="./layout/{CENTRAL_TEMPLATE}/images/icon-192.png">
+
+    <!-- PWA Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./layout/{CENTRAL_TEMPLATE}/sw.js')
+            .then(reg => console.log('PWA carregado'))
+            .catch(err => console.log('Erro PWA', err));
+        });
+      }
+    </script>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                900: '#0c4a6e',
+              },
+              dark: {
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      .glass-header {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar-link {
+        transition: all 0.2s;
+      }
+      .sidebar-link:hover,
+      .sidebar-link.active {
+        background: rgba(14, 165, 233, 0.1);
+        color: #38bdf8;
+        border-right: 3px solid #0ea5e9;
+      }
+
+      /* Form Controls */
+      .form-input {
+        width: 100%;
+        background-color: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        color: #e2e8f0;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        background-color: rgba(30, 41, 59, 0.8);
+      }
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+      }
+      html, body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-dark-900 text-slate-300 font-sans antialiased"
+  >
+    <div class="flex min-h-screen w-full">
+      <!-- Sidebar (Desktop) -->
+      <aside
+        class="hidden md:flex flex-col w-64 bg-dark-950 border-r border-slate-800/50 md:fixed md:top-0 md:left-0 md:bottom-0 md:h-screen md:z-10"
+      >
+        <div class="h-16 flex items-center px-6 border-b border-slate-800/50">
+          <span class="text-xl font-bold text-white tracking-tight"
+            ><span class="text-brand-500">Central</span> Assinante</span
+          >
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-4 space-y-1">
+          <p
+            class="px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-2"
+          >
+            Principal
+          </p>
+
+          <a
+            href="./index.hhvm"
+            class="sidebar-link flex items-center px-6 py-3 text-sm font-medium border-r-2 border-transparent text-slate-400 hover:text-white"
+          >
+            <i class="bi bi-grid-fill text-lg mr-3"></i> Início
+          </a>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-person-fill text-lg mr-3"></i> Meus Dados</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./atualizar_dados.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Atualizar Dados</a
+              >
+              <!-- BEGIN BLOCK_MENUSENHA -->
+              <a
+                href="./trocar_senha.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Trocar Senha</a
+              >
+              <!-- END BLOCK_MENUSENHA -->
+              <a
+                href="./foto.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Trocar Foto</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-wallet-fill text-lg mr-3"></i> Financeiro</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENU2VIA -->
+              <a
+                href="./2_via.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >2ª Via Boleto</a
+              >
+              <!-- END BLOCK_MENU2VIA -->
+              <a
+                href="./servicos.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Serviços</a
+              >
+              <a
+                href="./faturas.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Histórico Faturas</a
+              >
+              <a
+                href="./comprovante.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Comprovantes</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-white transition-colors"
+            >
+              <!-- Active State for Conexao -->
+              <span class="flex items-center text-brand-500"
+                ><i class="bi bi-globe2 text-lg mr-3"></i> Conexão</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./relatorio.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Relatório de Uso</a
+              >
+              <!-- BEGIN BLOCK_MENUDISCO -->
+              <a
+                href="./disco_virtual.hhvm"
+                class="block py-2 text-sm text-brand-400 font-medium"
+                >Disco Virtual</a
+              >
+              <!-- END BLOCK_MENUDISCO -->
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-headset text-lg mr-3"></i> Suporte</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENUCHAMADOS -->
+              <a
+                href="./suporte.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Chamados</a
+              >
+              <!-- END BLOCK_MENUCHAMADOS -->
+              <a
+                href="./downloads.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Downloads</a
+              >
+              <!-- BEGIN BLOCK_MENUFALE -->
+              <a
+                href="./fale_conosco.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Fale Conosco</a
+              >
+              <!-- END BLOCK_MENUFALE -->
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-800/50">
+          <a
+            href="./executar_central.hhvm?acao=sair"
+            class="flex items-center justify-center w-full py-2 px-4 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-colors text-sm font-medium"
+          >
+            <i class="bi bi-box-arrow-right mr-2"></i> Sair do Sistema
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main
+        class="flex-1 flex flex-col relative bg-dot-pattern overflow-x-hidden md:ml-64"
+      >
+        <!-- Mobile Header -->
+        <header
+          class="glass-header h-16 flex items-center justify-between px-4 md:px-8 z-20 sticky top-0"
+        >
+          <div class="flex items-center md:hidden">
+            <button
+              id="mobile-menu-btn"
+              class="text-slate-300 hover:text-white p-2"
+            >
+              <i class="bi bi-list text-2xl"></i>
+            </button>
+            <span class="ml-3 text-lg font-bold text-white">Disco Virtual</span>
+          </div>
+
+          <!-- Desktop Left Info -->
+          <div class="hidden md:flex items-center space-x-4">
+            <div
+              class="h-8 w-8 rounded bg-slate-800 p-1 flex items-center justify-center"
+            >
+              <img
+                src="../mkfiles/logo.jpg"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white">{PROVEDOR_NOME}</h2>
+              <p class="text-xs text-slate-500">Painel de Controle</p>
+            </div>
+          </div>
+
+          <!-- Right Actions -->
+          <div class="flex items-center space-x-4">
+            <!-- Notification Bell -->
+            <div class="relative group">
+              <button
+                class="p-2 text-slate-400 hover:text-white transition-colors relative"
+              >
+                <i class="bi bi-bell text-xl"></i>
+                <span
+                  class="absolute top-1 right-1 h-4 w-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white font-bold"
+                  >{TOTAL_AVISOS}</span
+                >
+              </button>
+
+              <!-- Dropdown Notifications -->
+              <div
+                class="absolute right-0 top-full mt-2 w-72 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform translate-y-2 group-hover:translate-y-0"
+              >
+                <div
+                  class="p-3 border-b border-slate-700 font-semibold text-sm text-white"
+                >
+                  Avisos e Notificações
+                </div>
+                <div class="max-h-64 overflow-y-auto">
+                  <ul class="py-1">
+                    <!-- BEGIN BLOCK_DADOSAVISOS -->
+                    <li>
+                      <a
+                        href="{CLIENTE_AVISO_LINK}"
+                        class="block px-4 py-3 hover:bg-slate-700/50 transition-colors"
+                      >
+                        <p class="text-sm text-slate-200 line-clamp-2">
+                          {CLIENTE_AVISO_MSG}
+                        </p>
+                      </a>
+                    </li>
+                    <!-- END BLOCK_DADOSAVISOS -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex items-center pl-4 border-l border-slate-800">
+              <div class="text-right mr-3 hidden md:block">
+                <p class="text-sm font-medium text-white">{CLIENTE_NOME_RES}</p>
+                <p class="text-xs text-slate-500">Assinante</p>
+              </div>
+              <div
+                class="h-10 w-10 rounded-full bg-slate-700 p-0.5 ring-2 ring-slate-800 cursor-pointer overflow-hidden"
+              >
+                <img
+                  src="../mkfiles/{CLIENTE_FOTO}"
+                  class="h-full w-full rounded-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="p-4 md:p-8">
+          <div class="max-w-4xl mx-auto space-y-8 pb-20">
+            <!-- Page Header & Usage Stats -->
+            <div
+              class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl relative overflow-hidden"
+            >
+              <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="bi bi-hdd-network text-9xl text-white"></i>
+              </div>
+              <div class="relative z-10">
+                <h1 class="text-2xl font-bold text-white tracking-tight">
+                  Disco Virtual
+                </h1>
+                <p class="text-slate-400 text-sm mt-1 mb-4">
+                  Gerencie seus arquivos na nuvem do provedor com segurança.
+                </p>
+
+                <div
+                  class="flex flex-col md:flex-row items-center gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/50"
+                >
+                  <div class="w-full md:w-1/2">
+                    <div
+                      class="flex justify-between text-xs text-slate-400 mb-1"
+                    >
+                      <span>Uso do Disco</span>
+                      <span
+                        >{DISCO_USADO} de {DISCO_TOTAL} ({DISCO_PERC}%)</span
+                      >
+                    </div>
+                    <div
+                      class="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden"
+                    >
+                      <div
+                        class="bg-brand-500 h-2.5 rounded-full transition-all duration-1000 ease-out"
+                        id="disco-progress-bar"
+                        data-width="{DISCO_PERC}%"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UPLOAD VIEW -->
+            <!-- BEGIN BLOCK_PAGEUPLOAD -->
+            <div
+              class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm p-6 md:p-8"
+            >
+              <h3
+                class="text-lg font-bold text-white mb-6 border-b border-slate-800 pb-2 flex items-center"
+              >
+                <i class="bi bi-cloud-upload text-brand-500 mr-2"></i> Enviar
+                Arquivo
+              </h3>
+              <form
+                action="executar_central.hhvm?acao=upload_disco"
+                method="post"
+                enctype="multipart/form-data"
+                name="form"
+                id="form"
+                class="space-y-6"
+              >
+                <div
+                  class="flex flex-col items-center justify-center border-2 border-dashed border-slate-700 rounded-xl p-10 bg-slate-800/20 hover:bg-slate-800/40 transition-colors"
+                >
+                  <i
+                    class="bi bi-file-earmark-arrow-up text-5xl text-slate-500 mb-4"
+                  ></i>
+                  <label
+                    for="file"
+                    class="cursor-pointer text-brand-400 hover:text-brand-300 font-medium text-lg"
+                  >
+                    Selecionar arquivo do computador
+                  </label>
+                  <input
+                    name="file"
+                    type="file"
+                    id="file"
+                    class="hidden"
+                    onchange="document.getElementById('file-name').textContent = this.files[0].name"
+                  />
+                  <p id="file-name" class="mt-2 text-sm text-slate-400">
+                    Nenhum arquivo selecionado
+                  </p>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                  <a
+                    href="disco_virtual.hhvm"
+                    class="px-6 py-3 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition-all text-sm font-bold"
+                    >Cancelar</a
+                  >
+                  <button
+                    type="submit"
+                    class="bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-brand-500/20 transition-all transform hover:scale-[1.02] flex items-center"
+                  >
+                    <i class="bi bi-upload mr-2"></i> Enviar
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- END BLOCK_PAGEUPLOAD -->
+
+            <!-- FILE LIST VIEW -->
+            <!-- BEGIN BLOCK_PAGEDEFAULT -->
+            <div
+              class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm"
+            >
+              <div
+                class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-800/20"
+              >
+                <h3 class="text-lg font-bold text-white flex items-center">
+                  <i class="bi bi-folder2-open text-brand-500 mr-2"></i> Meus
+                  Arquivos
+                </h3>
+                <div class="flex space-x-2">
+                  <button
+                    type="button"
+                    id="btn_adicionar"
+                    class="bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-lg shadow-brand-500/20 transition-all flex items-center"
+                  >
+                    <i class="bi bi-plus-lg mr-1"></i> Novo
+                  </button>
+                  <button
+                    type="button"
+                    id="btn_remover"
+                    class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-600/30 text-sm font-medium py-2 px-4 rounded-lg transition-all flex items-center"
+                  >
+                    <i class="bi bi-trash mr-1"></i> Excluir
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <form
+                  action="executar_central.hhvm?acao=delfiles"
+                  method="post"
+                  name="form_combox"
+                  id="form_combox"
+                >
+                  <table class="w-full text-left border-collapse">
+                    <thead
+                      class="bg-slate-900/50 text-slate-400 text-xs uppercase font-semibold"
+                    >
+                      <tr>
+                        <th class="p-4 w-12 text-center">
+                          <input
+                            type="checkbox"
+                            name="check_all"
+                            id="check_all"
+                            class="rounded border-slate-600 bg-slate-700 text-brand-500 focus:ring-offset-slate-900 focus:ring-brand-500"
+                          />
+                        </th>
+                        <th class="p-4">Arquivo</th>
+                        <th class="p-4 w-32 text-right">Tamanho</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      class="divide-y divide-slate-700/50 text-sm text-slate-300"
+                    >
+                      <!-- BEGIN BLOCK_ARQUIVOS -->
+                      <!-- BEGIN BLOCK_DADOSARQUIVOS -->
+                      <tr class="hover:bg-slate-700/30 transition-colors group">
+                        <td class="p-4 text-center">
+                          <input
+                            type="checkbox"
+                            name="v_file[]"
+                            value="{ARQUIVO_NOME}"
+                            class="rounded border-slate-600 bg-slate-700 text-brand-500 focus:ring-offset-slate-900 focus:ring-brand-500"
+                          />
+                        </td>
+                        <td class="p-4">
+                          <a
+                            href="baixar.hhvm?v_file={ARQUIVO_NOME}"
+                            class="flex items-center text-white hover:text-brand-400 transition-colors gap-3"
+                          >
+                            <div
+                              class="h-8 w-8 rounded bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-slate-700 group-hover:text-brand-400 transition-all"
+                            >
+                              <i class="fa {ARQUIVO_ICONE}"></i>
+                            </div>
+                            <span class="font-medium">{ARQUIVO_NOME}</span>
+                          </a>
+                        </td>
+                        <td class="p-4 text-right font-mono text-slate-400">
+                          {ARQUIVO_TAM}
+                        </td>
+                      </tr>
+                      <!-- END BLOCK_DADOSARQUIVOS -->
+                      <!-- END BLOCK_ARQUIVOS -->
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+
+              <!-- Pagination -->
+              <div
+                class="p-4 border-t border-slate-800 bg-slate-800/30 flex justify-end"
+              >
+                <div class="inline-flex rounded-md shadow-sm">
+                  <!-- BEGIN BLOCK_PAGANT -->
+                  <a
+                    href="./disco_virtual.hhvm?pag={PAGINA_ANT}"
+                    class="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800/50 border border-slate-700 rounded-l-lg hover:bg-slate-700 hover:text-white transition-colors"
+                  >
+                    <i class="bi bi-chevron-left mr-1"></i> Anterior
+                  </a>
+                  <!-- END BLOCK_PAGANT -->
+
+                  <!-- BEGIN BLOCK_PAGPRO -->
+                  <a
+                    href="./disco_virtual.hhvm?pag={PAGINA_PRO}"
+                    class="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800/50 border border-slate-700 border-l-0 rounded-r-lg hover:bg-slate-700 hover:text-white transition-colors"
+                  >
+                    Próxima <i class="bi bi-chevron-right ml-1"></i>
+                  </a>
+                  <!-- END BLOCK_PAGPRO -->
+                </div>
+              </div>
+            </div>
+            <!-- END BLOCK_PAGEDEFAULT -->
+
+            <!-- Footer -->
+            <footer class="mt-auto border-t border-slate-800/50 pt-12 pb-10 bg-black/10">
+              <div
+                class="flex flex-col md:flex-row justify-between items-center gap-4"
+              >
+                <!-- Social Links -->
+                                <div class="flex flex-wrap justify-center gap-3 redes-sociais">
+                  <a href="{INSTAGRAM}" target="_blank" id="instagram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-500 hover:text-white transition-all"><i class="bi bi-instagram"></i></a>
+                  <a href="{WHATSAPP}" target="_blank" id="whatsapp" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-green-500 hover:text-white transition-all"><i class="bi bi-whatsapp"></i></a>
+                  <a href="{TIKTOK}" target="_blank" id="tiktok" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all"><i class="bi bi-tiktok"></i></a>
+                  <a href="{TWITTER}" target="_blank" id="twitter" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-500 hover:text-white transition-all"><i class="bi bi-twitter"></i></a>
+                  <a href="{FACEBOOK}" target="_blank" id="facebook" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="bi bi-facebook"></i></a>
+                  <a href="{LINKEDIN}" target="_blank" id="linkedin" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-700 hover:text-white transition-all"><i class="bi bi-linkedin"></i></a>
+                  <a href="{YOUTUBE}" target="_blank" id="youtube" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-red-600 hover:text-white transition-all"><i class="bi bi-youtube"></i></a>
+                  <a href="{TELEGRAM}" target="_blank" id="telegram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-400 hover:text-white transition-all"><i class="bi bi-telegram"></i></a>
+                  <a href="{SKYPE}" target="_blank" id="skype" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-500 hover:text-white transition-all"><i class="bi bi-skype"></i></a>
+                  <a href="{KWAI}" target="_blank" id="kwai" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-500 hover:text-white transition-all"><i class="bi bi-camera-reels-fill"></i></a>
+                </div>
+
+                <div class="text-center md:text-right text-xs text-slate-500">
+                  <p>
+                    &copy; {ANO_ATUAL} - {PROVEDOR_NOME} - Todos os direitos
+                    reservados.<br>
+                  </p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/jquery.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/sweetalert2.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/mk-auth.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/utils.js"></script>
+    <script>
+      // Use jQuery for compatibility + Tailwind Interactivity
+
+      $(document).ready(function () {
+        // -- MOBILE MENU (OVERLAY) --
+        const $sidebar = $('aside');
+        const $mobileBtn = $('#mobile-menu-btn');
+        
+        // 1. Injetar Backdrop e Botão de Fechar se não existirem
+        if ($('#mobile-backdrop').length === 0) {
+          $('body').append('<div id="mobile-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>');
+        }
+        const $backdrop = $('#mobile-backdrop');
+
+        if ($sidebar.find('#mobile-close-btn').length === 0) {
+          const $header = $sidebar.find('> div').first();
+          $header.addClass('justify-between');
+          $header.append(`
+            <button id="mobile-close-btn" class="md:hidden text-slate-400 hover:text-white p-2">
+              <i class="bi bi-x-lg text-lg"></i>
+            </button>
+          `);
+        }
+
+        // 2. Função de Toggle
+        function toggleMobileSidebar(show) {
+          if (show) {
+            $sidebar.removeClass('hidden').addClass('flex fixed inset-y-0 left-0 z-50 w-72 bg-dark-950 shadow-2xl transform -translate-x-full transition-transform duration-300');
+            $backdrop.removeClass('hidden');
+            setTimeout(() => {
+              $sidebar.removeClass('-translate-x-full').addClass('translate-x-0');
+              $backdrop.addClass('opacity-100').removeClass('opacity-0');
+            }, 10);
+            $('body, html').addClass('overflow-hidden h-full fixed w-full');
+          } else {
+            $sidebar.removeClass('translate-x-0').addClass('-translate-x-full');
+            $backdrop.removeClass('opacity-100').addClass('opacity-0');
+            setTimeout(() => {
+              $sidebar.addClass('hidden').removeClass('flex fixed inset-y-0 left-0 z-50 w-72 transform translate-x-0 -translate-x-full');
+              $backdrop.addClass('hidden');
+              $('body, html').removeClass('overflow-hidden h-full fixed w-full');
+            }, 300);
+          }
+        }
+
+        $mobileBtn.on('click', function (e) {
+          e.stopPropagation();
+          toggleMobileSidebar(true);
+        });
+
+        $(document).on('click', '#mobile-close-btn, #mobile-backdrop', function () {
+          toggleMobileSidebar(false);
+        });
+
+        // 3. Submenus Desktop (Corrigir problema de "Todos Abertos")
+        const $submenus = $sidebar.find('.group .bg-slate-900\\/50');
+        $submenus.hide();
+
+        $sidebar.find('.group > button').on('click', function () {
+          const $thisMenu = $(this).next('.bg-slate-900\\/50');
+          const $icon = $(this).find('.bi-chevron-down');
+          $thisMenu.slideToggle(200);
+          if ($icon.length) {
+            $icon.toggleClass('rotate-180');
+          }
+        });
+
+        // 5. Active State Persistence
+        var pathName = window.location.pathname.split('/').pop();
+        if (pathName === '' || pathName === 'central') pathName = 'index.hhvm';
+
+        $sidebar.find('a').each(function () {
+          var href = $(this).attr('href');
+          if (!href) return;
+          var cleanHref = href.replace('./', '');
+
+          if (pathName.indexOf(cleanHref) > -1) {
+            $(this)
+              .addClass('text-brand-400 font-medium')
+              .removeClass('text-slate-400');
+
+            var $parentMenu = $(this).closest('.bg-slate-900\\/50');
+            if ($parentMenu.length) {
+              $parentMenu.show();
+              $parentMenu
+                .prev('button')
+                .find('.bi-chevron-down')
+                .addClass('rotate-180');
+              $parentMenu
+                .prev('button')
+                .addClass('text-brand-500')
+                .removeClass('text-slate-400');
+            }
+          }
+        });
+
+        // 6. Disco Progress Animation
+        setTimeout(function () {
+          const $progressBar = $('#disco-progress-bar');
+          if ($progressBar.length) {
+            $progressBar.css('width', $progressBar.attr('data-width'));
+          }
+        }, 500);
+      });
+      // Disco Virtual scripts
+      jQuery('#check_all').click(function () {
+        jQuery('input:checkbox').not(this).prop('checked', this.checked);
+      });
+
+      jQuery('#btn_adicionar').click(function () {
+        window.location.href = 'disco_virtual.hhvm?page=upload';
+      });
+
+      jQuery('#btn_remover').click(function () {
+        var confirmed = confirm(
+          'Deseja realmente excluir os arquivos selecionados?',
+        );
+        if (confirmed) {
+          $('#form_combox').submit();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,241 @@
+:root {
+  --vps-navy: #071c38;
+  --vps-blue: #176bff;
+  --vps-cyan: #18d7f4;
+  --vps-white: #ffffff;
+}
+
+body.vpscloud-login {
+  background-color: #06172d !important;
+  background-image: linear-gradient(90deg, rgba(3, 14, 31, .36), rgba(3, 14, 31, .08)), url("../img/vpscloud-login-background.svg?v=20260801") !important;
+  background-position: center !important;
+  background-size: cover !important;
+  color: var(--vps-navy);
+}
+
+body.vpscloud-login section {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 74px);
+  display: flex;
+  align-items: center;
+  padding: 50px 0 100px;
+}
+
+body.vpscloud-login section > .container {
+  width: 100%;
+}
+
+body.vpscloud-login .box {
+  margin-top: 0;
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 30px 80px rgba(0, 13, 32, .36);
+  padding: 36px 34px 30px;
+}
+
+body.vpscloud-login .mkalogo {
+  margin-top: -94px;
+  padding-bottom: 26px;
+  text-align: center;
+}
+
+body.vpscloud-login .mkalogo a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 330px);
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(4, 25, 54, .18), 0 0 0 1px rgba(23, 107, 255, .1);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+body.vpscloud-login .mkalogo a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 46px rgba(4, 25, 54, .23), 0 0 0 1px rgba(23, 107, 255, .18);
+}
+
+body.vpscloud-login .mkalogo img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.vpscloud-login .input {
+  min-height: 48px;
+  border-color: #d6e1ef;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+body.vpscloud-login .input:focus {
+  border-color: var(--vps-blue);
+  box-shadow: 0 0 0 4px rgba(23, 107, 255, .11);
+}
+
+body.vpscloud-login .button.is-primary {
+  background: linear-gradient(135deg, var(--vps-blue), #0d8cd8);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(23, 107, 255, .22);
+}
+
+.vpscloud-hero-brand {
+  position: fixed;
+  z-index: 1;
+  right: 4vw;
+  top: 50%;
+  transform: translateY(-54%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  width: 42vw;
+  filter: drop-shadow(0 18px 30px rgba(0, 10, 28, .28));
+}
+
+.vpscloud-hero-brand:hover { color: #fff; }
+
+.vpscloud-cloud-symbol {
+  width: 150px;
+  height: 120px;
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, .94);
+  background: currentColor;
+  -webkit-mask: url('../img/network-consulting-symbol.svg?v=20260801-1') center / contain no-repeat;
+  mask: url('../img/network-consulting-symbol.svg?v=20260801-1') center / contain no-repeat;
+}
+
+.vpscloud-cloud-symbol::before,
+.vpscloud-cloud-symbol::after {
+  content: none;
+}
+
+.vpscloud-wordmark {
+  font: 800 clamp(42px, 4.4vw, 70px)/.95 Arial, Helvetica, sans-serif;
+  letter-spacing: .08em;
+}
+
+.vpscloud-consulting {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 2px solid rgba(119, 229, 243, .6);
+  color: #d9f7ff;
+  font: 500 clamp(18px, 1.8vw, 28px)/1.2 Arial, Helvetica, sans-serif;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 1024px) {
+  body.vpscloud-login section .column.is-6.is-offset-3 {
+    width: min(46%, 600px);
+    margin-left: 4vw;
+  }
+}
+
+body.vpscloud-login .navbar {
+  min-height: 74px;
+  background: rgba(3, 14, 31, .94);
+  border-top: 1px solid rgba(119, 229, 243, .18);
+  backdrop-filter: blur(12px);
+}
+
+.vpscloud-footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #cfe6ff;
+}
+
+.vpscloud-card-links { display: none; }
+
+.vpscloud-central-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 16px;
+  border: 1px solid rgba(23, 107, 255, .22);
+  border-radius: 10px;
+  background: #edf6ff;
+  color: var(--vps-blue);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.vpscloud-central-button:hover {
+  transform: translateY(-1px);
+  background: var(--vps-blue);
+  color: #fff;
+  text-decoration: none;
+}
+
+.vpscloud-footer-links a {
+  color: #7be8f5;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.vpscloud-footer-links a:hover { color: #fff; text-decoration: underline; }
+
+.vpscloud-copyright {
+  color: #9fb2c9;
+  font-size: 11px;
+}
+
+@media (max-width: 1023px) {
+  .vpscloud-hero-brand { display: none; }
+  body.vpscloud-login section { min-height: 100vh; padding: 90px 16px 120px; }
+  body.vpscloud-login .navbar { display: flex !important; }
+  body.vpscloud-login .navbar-start { flex-wrap: wrap; }
+}
+
+@media (max-width: 767px) {
+  body.vpscloud-login .box { padding: 32px 20px 24px; border-radius: 18px; }
+  body.vpscloud-login .mkalogo { margin-top: -82px; }
+  body.vpscloud-login .mkalogo a { max-width: 280px; }
+  body.vpscloud-login .navbar-end { display: none; }
+  .vpscloud-footer-links { padding-top: 0; }
+  .vpscloud-card-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #dce7f3;
+  }
+  .vpscloud-card-links a {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 9px 10px;
+    border-radius: 10px;
+    background: #edf6ff;
+    color: var(--vps-navy);
+    text-decoration: none;
+  }
+  .vpscloud-card-links small { font-size: 9px; color: #5f7188; }
+  .vpscloud-card-links strong { overflow: hidden; font-size: 10px; color: var(--vps-blue); text-overflow: ellipsis; }
+  .vpscloud-card-copyright {
+    grid-column: 1 / -1;
+    color: #6b7d92;
+    font-size: 9px;
+    text-align: center;
+  }
+}

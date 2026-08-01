@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Processando Pagamento</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9' }, dark: { 900: '#0f172a' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-900 text-white flex items-center justify-center h-screen flex-col">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-brand-500 border-opacity-75 mb-6"></div>
+    <h1 class="text-xl font-semibold tracking-wide">Redirecionando para o Pagamento...</h1>
+    <p class="text-slate-400 text-sm mt-2">Aguarde um momento enquanto conectamos ao provedor financeiro.</p>
+<script src="./layout/{CENTRAL_TEMPLATE}/js/mk-auth.js"></script>
+</body>
+</html>

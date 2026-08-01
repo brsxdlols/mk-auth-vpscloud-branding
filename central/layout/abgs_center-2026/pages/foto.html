@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Central do Assinante - Foto do Perfil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="manifest" href="./layout/{CENTRAL_TEMPLATE}/manifest.json">
+    <link rel="apple-touch-icon" href="./layout/{CENTRAL_TEMPLATE}/images/icon-192.png">
+
+    <!-- PWA Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./layout/{CENTRAL_TEMPLATE}/sw.js')
+            .then(reg => console.log('PWA carregado'))
+            .catch(err => console.log('Erro PWA', err));
+        });
+      }
+    </script>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                900: '#0c4a6e',
+              },
+              dark: {
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      .glass-header {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar-link {
+        transition: all 0.2s;
+      }
+      .sidebar-link:hover,
+      .sidebar-link.active {
+        background: rgba(14, 165, 233, 0.1);
+        color: #38bdf8;
+        border-right: 3px solid #0ea5e9;
+      }
+
+      /* File Input Styling */
+      input[type='file']::file-selector-button {
+        margin-right: 1rem;
+        border: 0;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        background-color: #0ea5e9;
+        color: #fff;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+      input[type='file']::file-selector-button:hover {
+        background-color: #0284c7;
+      }
+      html, body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-dark-900 text-slate-300 font-sans antialiased"
+  >
+    <div class="flex min-h-screen w-full">
+      <!-- Sidebar (Desktop) -->
+      <aside
+        class="hidden md:flex flex-col w-64 bg-dark-950 border-r border-slate-800/50 md:fixed md:top-0 md:left-0 md:bottom-0 md:h-screen md:z-10"
+      >
+        <div class="h-16 flex items-center px-6 border-b border-slate-800/50">
+          <span class="text-xl font-bold text-white tracking-tight"
+            ><span class="text-brand-500">Central</span> Assinante</span
+          >
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-4 space-y-1">
+          <p
+            class="px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-2"
+          >
+            Principal
+          </p>
+
+          <a
+            href="./index.hhvm"
+            class="sidebar-link flex items-center px-6 py-3 text-sm font-medium border-r-2 border-transparent text-slate-400 hover:text-white"
+          >
+            <i class="bi bi-grid-fill text-lg mr-3"></i> Início
+          </a>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-white transition-colors"
+            >
+              <!-- Active State for Dados -->
+              <span class="flex items-center text-brand-500"
+                ><i class="bi bi-person-fill text-lg mr-3"></i> Meus Dados</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./atualizar_dados.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Atualizar Dados</a
+              >
+              <!-- BEGIN BLOCK_MENUSENHA -->
+              <a
+                href="./trocar_senha.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Trocar Senha</a
+              >
+              <!-- END BLOCK_MENUSENHA -->
+              <a
+                href="./foto.hhvm"
+                class="block py-2 text-sm text-brand-400 font-medium"
+                >Trocar Foto</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-wallet-fill text-lg mr-3"></i> Financeiro</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENU2VIA -->
+              <a
+                href="./2_via.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >2ª Via Boleto</a
+              >
+              <!-- END BLOCK_MENU2VIA -->
+              <a
+                href="./servicos.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Serviços</a
+              >
+              <a
+                href="./faturas.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Histórico Faturas</a
+              >
+              <a
+                href="./comprovante.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Comprovantes</a
+              >
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-globe2 text-lg mr-3"></i> Conexão</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <a
+                href="./relatorio.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Relatório de Uso</a
+              >
+              <!-- BEGIN BLOCK_MENUDISCO -->
+              <a
+                href="./disco_virtual.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Disco Virtual</a
+              >
+              <!-- END BLOCK_MENUDISCO -->
+            </div>
+          </div>
+
+          <div class="group relative">
+            <button
+              class="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              <span class="flex items-center"
+                ><i class="bi bi-headset text-lg mr-3"></i> Suporte</span
+              >
+              <i class="bi bi-chevron-down text-xs"></i>
+            </button>
+            <div class="bg-slate-900/50 pl-11 py-2 space-y-1">
+              <!-- BEGIN BLOCK_MENUCHAMADOS -->
+              <a
+                href="./suporte.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Chamados</a
+              >
+              <!-- END BLOCK_MENUCHAMADOS -->
+              <a
+                href="./downloads.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Downloads</a
+              >
+              <!-- BEGIN BLOCK_MENUFALE -->
+              <a
+                href="./fale_conosco.hhvm"
+                class="block py-2 text-sm text-slate-400 hover:text-brand-400"
+                >Fale Conosco</a
+              >
+              <!-- END BLOCK_MENUFALE -->
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-800/50">
+          <a
+            href="./executar_central.hhvm?acao=sair"
+            class="flex items-center justify-center w-full py-2 px-4 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 text-slate-400 rounded-lg transition-colors text-sm font-medium"
+          >
+            <i class="bi bi-box-arrow-right mr-2"></i> Sair do Sistema
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main
+        class="flex-1 flex flex-col relative bg-dot-pattern overflow-x-hidden md:ml-64"
+      >
+        <!-- Mobile Header -->
+        <header
+          class="glass-header h-16 flex items-center justify-between px-4 md:px-8 z-20 sticky top-0"
+        >
+          <div class="flex items-center md:hidden">
+            <button
+              id="mobile-menu-btn"
+              class="text-slate-300 hover:text-white p-2"
+            >
+              <i class="bi bi-list text-2xl"></i>
+            </button>
+            <span class="ml-3 text-lg font-bold text-white">Alterar Foto</span>
+          </div>
+
+          <!-- Desktop Left Info -->
+          <div class="hidden md:flex items-center space-x-4">
+            <div
+              class="h-8 w-8 rounded bg-slate-800 p-1 flex items-center justify-center"
+            >
+              <img
+                src="../mkfiles/logo.jpg"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white">{PROVEDOR_NOME}</h2>
+              <p class="text-xs text-slate-500">Painel de Controle</p>
+            </div>
+          </div>
+
+          <!-- Right Actions -->
+          <div class="flex items-center space-x-4">
+            <!-- Notification Bell -->
+            <div class="relative group">
+              <button
+                class="p-2 text-slate-400 hover:text-white transition-colors relative"
+              >
+                <i class="bi bi-bell text-xl"></i>
+                <span
+                  class="absolute top-1 right-1 h-4 w-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white font-bold"
+                  >{TOTAL_AVISOS}</span
+                >
+              </button>
+
+              <!-- Dropdown Notifications -->
+              <div
+                class="absolute right-0 top-full mt-2 w-72 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform translate-y-2 group-hover:translate-y-0"
+              >
+                <div
+                  class="p-3 border-b border-slate-700 font-semibold text-sm text-white"
+                >
+                  Avisos e Notificações
+                </div>
+                <div class="max-h-64 overflow-y-auto">
+                  <ul class="py-1">
+                    <!-- BEGIN BLOCK_DADOSAVISOS -->
+                    <li>
+                      <a
+                        href="{CLIENTE_AVISO_LINK}"
+                        class="block px-4 py-3 hover:bg-slate-700/50 transition-colors"
+                      >
+                        <p class="text-sm text-slate-200 line-clamp-2">
+                          {CLIENTE_AVISO_MSG}
+                        </p>
+                      </a>
+                    </li>
+                    <!-- END BLOCK_DADOSAVISOS -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex items-center pl-4 border-l border-slate-800">
+              <div class="text-right mr-3 hidden md:block">
+                <p class="text-sm font-medium text-white">{CLIENTE_NOME_RES}</p>
+                <p class="text-xs text-slate-500">Assinante</p>
+              </div>
+              <div
+                class="h-10 w-10 rounded-full bg-slate-700 p-0.5 ring-2 ring-slate-800 cursor-pointer overflow-hidden"
+              >
+                <img
+                  src="../mkfiles/{CLIENTE_FOTO}"
+                  class="h-full w-full rounded-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="p-4 md:p-8">
+          <div class="max-w-5xl mx-auto space-y-8 pb-20">
+            <!-- Page Header -->
+            <div>
+              <h1 class="text-2xl font-bold text-white tracking-tight">
+                Alterar Foto de Perfil
+              </h1>
+              <p class="text-slate-400 text-sm mt-1">
+                Carregue uma nova foto ou use sua webcam para atualizar seu
+                perfil.
+              </p>
+            </div>
+
+            <!-- Layout: Upload and Webcam side by side (if desktop) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <!-- File Upload Section -->
+              <div
+                class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm p-6 flex flex-col items-center justify-center"
+              >
+                <h3
+                  class="text-lg font-semibold text-white mb-6 border-b border-slate-800 w-full pb-2 text-center"
+                >
+                  <i class="bi bi-upload text-brand-500 mr-2"></i> Enviar
+                  Arquivo
+                </h3>
+
+                <form
+                  action="executar_central.hhvm?acao=foto"
+                  method="post"
+                  enctype="multipart/form-data"
+                  name="form"
+                  id="form"
+                  class="w-full space-y-6"
+                >
+                  <div class="w-full flex justify-center">
+                    <div
+                      class="relative w-40 h-40 rounded-full border-4 border-slate-800 overflow-hidden bg-slate-900 shadow-inner group"
+                    >
+                      <img
+                        src="../mkfiles/{CLIENTE_FOTO}"
+                        class="w-full h-full object-cover transition-transform group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="form-label text-center"
+                      >Selecionar Nova Foto</label
+                    >
+                    <input
+                      name="arquivo"
+                      type="file"
+                      id="txt_arquivo"
+                      class="w-full text-slate-400 text-sm bg-slate-800/50 rounded-lg p-2 border border-slate-700"
+                    />
+                    <p class="text-xs text-slate-500 text-center">
+                      Formatos aceitos: JPG, PNG
+                    </p>
+                  </div>
+
+                  <div class="pt-2">
+                    <button
+                      type="submit"
+                      class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center"
+                    >
+                      <i class="bi bi-cloud-upload text-lg mr-2"></i> Salvar
+                      Foto
+                    </button>
+                    <input
+                      name="hash"
+                      type="hidden"
+                      id="hash"
+                      value="{CLIENTE_FOTO}"
+                    />
+                  </div>
+                </form>
+              </div>
+
+              <!-- Webcam Section -->
+              <!-- BEGIN BLOCK_WEBCAM1 -->
+              <div
+                class="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm p-6 flex flex-col items-center"
+              >
+                <h3
+                  class="text-lg font-semibold text-white mb-6 border-b border-slate-800 w-full pb-2 text-center"
+                >
+                  <i class="bi bi-camera text-brand-500 mr-2"></i> Usar Webcam
+                </h3>
+
+                <!-- Webcam Viewport -->
+                <div
+                  class="bg-black rounded-xl overflow-hidden shadow-inner mb-4 border border-slate-700"
+                >
+                  <div id="fotografia1"></div>
+                </div>
+
+                <button
+                  type="button"
+                  id="capturar"
+                  class="bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 px-6 rounded-lg transition-colors mb-6 flex items-center"
+                >
+                  <i class="bi bi-camera-fill mr-2"></i> Tirar Foto
+                </button>
+
+                <!-- Captured Image Preview & Submit -->
+                <form
+                  action="webcam.hhvm"
+                  method="post"
+                  name="form_webcam"
+                  id="form_webcam"
+                  class="w-full"
+                >
+                  <div class="section" id="setor_enviar" style="display: none">
+                    <div
+                      class="flex flex-col items-center space-y-4 pt-4 border-t border-slate-800"
+                    >
+                      <p class="text-sm text-green-400 font-semibold">
+                        <i class="bi bi-check-circle mr-1"></i> Foto Capturada!
+                      </p>
+                      <div
+                        id="fotografia2"
+                        class="rounded-xl overflow-hidden border-2 border-brand-500 shadow-lg"
+                      ></div>
+                      <input name="foto64" type="hidden" id="foto64" value="" />
+                      <button
+                        type="submit"
+                        id="enviar"
+                        class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-green-500/20 transition-all flex items-center justify-center"
+                      >
+                        <i class="bi bi-save mr-2"></i> Salvar Captura
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- END BLOCK_WEBCAM1 -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-auto border-t border-slate-800/50 pt-12 pb-10 bg-black/10">
+              <div
+                class="flex flex-col md:flex-row justify-between items-center gap-4"
+              >
+                <!-- Social Links -->
+                                <div class="flex flex-wrap justify-center gap-3 redes-sociais">
+                  <a href="{INSTAGRAM}" target="_blank" id="instagram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-500 hover:text-white transition-all"><i class="bi bi-instagram"></i></a>
+                  <a href="{WHATSAPP}" target="_blank" id="whatsapp" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-green-500 hover:text-white transition-all"><i class="bi bi-whatsapp"></i></a>
+                  <a href="{TIKTOK}" target="_blank" id="tiktok" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all"><i class="bi bi-tiktok"></i></a>
+                  <a href="{TWITTER}" target="_blank" id="twitter" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-500 hover:text-white transition-all"><i class="bi bi-twitter"></i></a>
+                  <a href="{FACEBOOK}" target="_blank" id="facebook" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="bi bi-facebook"></i></a>
+                  <a href="{LINKEDIN}" target="_blank" id="linkedin" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-700 hover:text-white transition-all"><i class="bi bi-linkedin"></i></a>
+                  <a href="{YOUTUBE}" target="_blank" id="youtube" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-red-600 hover:text-white transition-all"><i class="bi bi-youtube"></i></a>
+                  <a href="{TELEGRAM}" target="_blank" id="telegram" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-400 hover:text-white transition-all"><i class="bi bi-telegram"></i></a>
+                  <a href="{SKYPE}" target="_blank" id="skype" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-500 hover:text-white transition-all"><i class="bi bi-skype"></i></a>
+                  <a href="{KWAI}" target="_blank" id="kwai" class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-500 hover:text-white transition-all"><i class="bi bi-camera-reels-fill"></i></a>
+                </div>
+
+                <div class="text-center md:text-right text-xs text-slate-500">
+                  <p>
+                    &copy; {ANO_ATUAL} - {PROVEDOR_NOME} - Todos os direitos
+                    reservados.<br>
+                  </p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/jquery.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/sweetalert2.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/mk-auth.js"></script>
+    <script src="./layout/{CENTRAL_TEMPLATE}/js/utils.js"></script>
+    <script>
+      // Use jQuery for compatibility + Tailwind Interactivity
+
+      $(document).ready(function () {
+        // -- MOBILE MENU (OVERLAY) --
+        const $sidebar = $('aside');
+        const $mobileBtn = $('#mobile-menu-btn');
+        
+        // 1. Injetar Backdrop e Botão de Fechar se não existirem
+        if ($('#mobile-backdrop').length === 0) {
+          $('body').append('<div id="mobile-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>');
+        }
+        const $backdrop = $('#mobile-backdrop');
+
+        if ($sidebar.find('#mobile-close-btn').length === 0) {
+          const $header = $sidebar.find('> div').first();
+          $header.addClass('justify-between');
+          $header.append(`
+            <button id="mobile-close-btn" class="md:hidden text-slate-400 hover:text-white p-2">
+              <i class="bi bi-x-lg text-lg"></i>
+            </button>
+          `);
+        }
+
+        // 2. Função de Toggle
+        function toggleMobileSidebar(show) {
+          if (show) {
+            $sidebar.removeClass('hidden').addClass('flex fixed inset-y-0 left-0 z-50 w-72 bg-dark-950 shadow-2xl transform -translate-x-full transition-transform duration-300');
+            $backdrop.removeClass('hidden');
+            setTimeout(() => {
+              $sidebar.removeClass('-translate-x-full').addClass('translate-x-0');
+              $backdrop.addClass('opacity-100').removeClass('opacity-0');
+            }, 10);
+            $('body, html').addClass('overflow-hidden h-full fixed w-full');
+          } else {
+            $sidebar.removeClass('translate-x-0').addClass('-translate-x-full');
+            $backdrop.removeClass('opacity-100').addClass('opacity-0');
+            setTimeout(() => {
+              $sidebar.addClass('hidden').removeClass('flex fixed inset-y-0 left-0 z-50 w-72 transform translate-x-0 -translate-x-full');
+              $backdrop.addClass('hidden');
+              $('body, html').removeClass('overflow-hidden h-full fixed w-full');
+            }, 300);
+          }
+        }
+
+        $mobileBtn.on('click', function (e) {
+          e.stopPropagation();
+          toggleMobileSidebar(true);
+        });
+
+        $(document).on('click', '#mobile-close-btn, #mobile-backdrop', function () {
+          toggleMobileSidebar(false);
+        });
+
+        // 3. Submenus Desktop (Corrigir problema de "Todos Abertos")
+        const $submenus = $sidebar.find('.group .bg-slate-900\\/50');
+        $submenus.hide();
+
+        $sidebar.find('.group > button').on('click', function () {
+          const $thisMenu = $(this).next('.bg-slate-900\\/50');
+          const $icon = $(this).find('.bi-chevron-down');
+          $thisMenu.slideToggle(200);
+          if ($icon.length) {
+            $icon.toggleClass('rotate-180');
+          }
+        });
+
+        // 5. Active State Persistence
+        var pathName = window.location.pathname.split('/').pop();
+        if (pathName === '' || pathName === 'central') pathName = 'index.hhvm';
+
+        $sidebar.find('a').each(function () {
+          var href = $(this).attr('href');
+          if (!href) return;
+          var cleanHref = href.replace('./', '');
+
+          if (pathName.indexOf(cleanHref) > -1) {
+            $(this)
+              .addClass('text-brand-400 font-medium')
+              .removeClass('text-slate-400');
+
+            var $parentMenu = $(this).closest('.bg-slate-900\\/50');
+            if ($parentMenu.length) {
+              $parentMenu.show();
+              $parentMenu
+                .prev('button')
+                .find('.bi-chevron-down')
+                .addClass('rotate-180');
+              $parentMenu
+                .prev('button')
+                .addClass('text-brand-500')
+                .removeClass('text-slate-400');
+            }
+          }
+        });
+      });
+    </script>
+    <!-- BEGIN BLOCK_WEBCAM2 -->
+    <script src="./webcam/webcam.js"></script>
+    <script language="JavaScript">
+      Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+      });
+
+      // Ensure element exists before attaching
+      if (document.getElementById('fotografia1')) {
+        Webcam.attach('#fotografia1');
+      }
+
+      jQuery('#capturar').click(function () {
+        Webcam.snap(function (data_uri) {
+          jQuery('#setor_enviar').slideDown();
+          jQuery('#foto64').val(data_uri);
+          jQuery('#fotografia2').html(
+            '<img src="' + data_uri + '" style="width:100%"/>',
+          );
+        });
+      });
+    </script>
+    <!-- END BLOCK_WEBCAM2 -->
+  </body>
+</html>
