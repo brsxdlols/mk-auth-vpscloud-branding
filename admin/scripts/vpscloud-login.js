@@ -32,7 +32,7 @@
     footer.className = 'vpscloud-footer-links';
     footer.innerHTML =
       '<span><a href="https://vpscloud.net.br/" target="_blank" rel="noopener noreferrer">VPS CLOUD - Network Consulting</a></span>' +
-      '<span>MK-Auth em Cloud: <a href="https://vpscloud.net.br/mk-auth.html" target="_blank" rel="noopener noreferrer">Planos</a></span>' +
+      '<span><a href="https://vpscloud.net.br/mk-auth.html" target="_blank" rel="noopener noreferrer">MK-Auth em Cloud</a></span>' +
       '<span class="vpscloud-copyright">Direitos autorais: Bruno Fontes - Network Consulting</span>';
     return footer;
   }
@@ -42,7 +42,7 @@
     footer.className = 'vpscloud-card-links';
     footer.innerHTML =
       '<a href="https://vpscloud.net.br/" target="_blank" rel="noopener noreferrer"><small>VPS CLOUD</small><strong>Network Consulting</strong></a>' +
-      '<a href="https://vpscloud.net.br/mk-auth.html" target="_blank" rel="noopener noreferrer"><small>MK-Auth em Cloud</small><strong>Planos</strong></a>' +
+      '<a href="https://vpscloud.net.br/mk-auth.html" target="_blank" rel="noopener noreferrer"><strong>MK-Auth em Cloud</strong></a>' +
       '<span class="vpscloud-card-copyright">Direitos autorais: Bruno Fontes - Network Consulting</span>';
     return footer;
   }
