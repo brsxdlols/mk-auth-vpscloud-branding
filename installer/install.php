@@ -11,6 +11,11 @@ if (!is_file($nativeJs)) {
     exit(1);
 }
 
+if (!is_dir($backupDir) && !mkdir($backupDir, 0755, true)) {
+    fwrite(STDERR, "Nao foi possivel criar a pasta de backup: $backupDir.\n");
+    exit(1);
+}
+
 $files = [
     $root . '/admin/img/vpscloud-mkauth.svg' => $admin . '/img/vpscloud-mkauth.svg',
     $root . '/admin/img/network-consulting-symbol.svg' => $admin . '/img/network-consulting-symbol.svg',
