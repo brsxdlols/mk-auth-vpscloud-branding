@@ -10,7 +10,16 @@ Execute como `root` no servidor MK-Auth:
 curl -fsSL https://raw.githubusercontent.com/brsxdlols/mk-auth-vpscloud-branding/main/install.sh | sh
 ```
 
-O instalador baixa a versão mais recente, aplica o login personalizado, instala o tema da Central do Assinante e configura autenticação por CPF.
+Esse comando mantém o comportamento completo: aplica o login personalizado, instala o tema da Central do Assinante e configura autenticação por CPF.
+
+### Instalar somente a Central do Assinante
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/brsxdlols/mk-auth-vpscloud-branding/main/install.sh | sh -s -- --central-only
+```
+
+O modo `--central-only` não copia assets do login e não altera `/opt/mk-auth/admin/scripts/mk-auth.js`.
+Antes de atualizar um tema já instalado, cria backup em `/opt/mk-auth/backups/vpscloud-branding/`.
 
 ## Diagnóstico
 
@@ -43,6 +52,12 @@ No servidor MK-Auth, como `root`:
 
 ```bash
 php installer/install.php
+```
+
+Somente a Central:
+
+```bash
+php installer/install.php --central-only
 ```
 
 O instalador utiliza automaticamente a conexão definida pelo próprio MK-Auth em `/opt/mk-auth/include/conexao.php`; nenhuma senha de banco é armazenada no projeto.

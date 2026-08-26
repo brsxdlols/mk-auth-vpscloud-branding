@@ -125,6 +125,26 @@
         color: #94a3b8;
         border: 1px solid rgba(100, 116, 139, 0.2);
       }
+      .dashboard-action-pdf {
+        color: #fb7185 !important;
+        background: rgba(244, 63, 94, 0.14) !important;
+        border: 1px solid rgba(251, 113, 133, 0.28) !important;
+      }
+      .dashboard-action-pdf:hover,
+      .dashboard-action-pdf:focus-visible {
+        color: #fff !important;
+        background: #e11d48 !important;
+      }
+      .dashboard-action-pix {
+        color: #34d399 !important;
+        background: rgba(16, 185, 129, 0.14) !important;
+        border: 1px solid rgba(52, 211, 153, 0.28) !important;
+      }
+      .dashboard-action-pix:hover,
+      .dashboard-action-pix:focus-visible {
+        color: #fff !important;
+        background: #059669 !important;
+      }
       html, body {
         overflow-x: hidden;
       }
@@ -513,9 +533,11 @@
                       class="bg-slate-900/50 text-slate-400 text-xs uppercase font-semibold"
                     >
                       <tr>
-                        <th class="p-4">Valor</th>
-                        <th class="p-4 text-right">Vencimento</th>
-                        <th class="p-4 text-center">Status</th>
+                        <th class="px-2 py-3 sm:p-4 whitespace-nowrap">Valor</th>
+                        <th class="px-2 py-3 sm:p-4 text-right whitespace-nowrap">Vencimento</th>
+                        <th class="px-2 py-3 sm:p-4 text-center whitespace-nowrap">Status</th>
+                        <th class="px-2 py-3 sm:p-4 text-center whitespace-nowrap">PDF</th>
+                        <th class="px-2 py-3 sm:p-4 text-center whitespace-nowrap">PIX</th>
                       </tr>
                     </thead>
                     <tbody
@@ -523,26 +545,44 @@
                     >
                       <!-- BEGIN BLOCK_FATURAS -->
                       <!-- BEGIN BLOCK_DADOSFATURAS -->
-                      <tr class="hover:bg-slate-700/30 transition-colors">
-                        <td class="p-4 font-medium text-white">
+                      <tr
+                        class="hover:bg-slate-700/30 transition-colors"
+                        data-fatura-uuid="{FATURA_UUID}"
+                      >
+                        <td class="px-2 py-3 sm:p-4 font-medium text-white whitespace-nowrap">
                           R$ {FATURA_VALOR}
                         </td>
-                        <td class="p-4 text-right font-mono">
+                        <td class="px-2 py-3 sm:p-4 text-right font-mono whitespace-nowrap">
                           {FATURA_VENCIMENTO}
                         </td>
-                        <td class="p-4 text-center">
+                        <td class="px-2 py-3 sm:p-4 text-center whitespace-nowrap">
                           <a
-                            href="prepara_boleto.hhvm?titulo={FATURA_UUID}"
-                            target="_blank"
-                            onClick="window.open(this.href, this.target, 'width=800, height=500, scrollbars=yes'); return false;"
+                            href="./faturas.hhvm"
+                            class="inline-flex"
+                            title="Abrir Histórico de Faturas"
+                            aria-label="Ver {FATURA_STATUS} no Histórico de Faturas"
                           >
                             <span
-                              class="px-2.5 py-1 rounded-full text-xs font-medium badge-{FATURA_BADGE}"
+                              class="inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-medium badge-{FATURA_BADGE}"
                             >
                               <i class="fa fa-{FATURA_ICONE} mr-1"></i>
                               {FATURA_STATUS}
                             </span>
                           </a>
+                        </td>
+                        <td class="px-2 py-3 sm:p-4 text-center js-fatura-pdf">
+                          <span
+                            class="inline-flex h-10 w-10 items-center justify-center rounded bg-slate-800 text-slate-600"
+                            title="PDF indisponível"
+                            aria-label="PDF indisponível"
+                          ><i class="bi bi-file-earmark-pdf" aria-hidden="true"></i></span>
+                        </td>
+                        <td class="px-2 py-3 sm:p-4 text-center js-fatura-pix">
+                          <span
+                            class="inline-flex h-10 w-10 items-center justify-center rounded bg-slate-800 text-slate-600"
+                            title="PIX indisponível"
+                            aria-label="PIX indisponível"
+                          ><i class="bi bi-qr-code" aria-hidden="true"></i></span>
                         </td>
                       </tr>
                       <!-- END BLOCK_DADOSFATURAS -->
@@ -664,6 +704,97 @@
       // Use jQuery for compatibility + Tailwind Interactivity
 
       $(document).ready(function () {
+        function parseBrazilianDate(value) {
+          const parts = String(value || '').trim().split('/');
+          if (parts.length !== 3) return Number.MAX_SAFE_INTEGER;
+          return new Date(
+            Number(parts[2]),
+            Number(parts[1]) - 1,
+            Number(parts[0])
+          ).getTime();
+        }
+
+        // Exibe primeiro as faturas pagas mais recentes e, em seguida, as
+        // demais faturas por vencimento crescente.
+        const $invoiceBody = $('tr[data-fatura-uuid]').first().closest('tbody');
+        const invoiceRows = $invoiceBody.children('tr[data-fatura-uuid]').get();
+        invoiceRows.sort(function (rowA, rowB) {
+          const $rowA = $(rowA);
+          const $rowB = $(rowB);
+          const paidA = $rowA.find('.badge-success').length > 0 || /\bpago\b/i.test($rowA.text());
+          const paidB = $rowB.find('.badge-success').length > 0 || /\bpago\b/i.test($rowB.text());
+          const dateA = parseBrazilianDate($rowA.children('td').eq(1).text());
+          const dateB = parseBrazilianDate($rowB.children('td').eq(1).text());
+
+          if (paidA !== paidB) return paidA ? -1 : 1;
+          return paidA ? dateB - dateA : dateA - dateB;
+        });
+        $invoiceBody.append(invoiceRows);
+
+        // Reutiliza as ações já autorizadas pela Segunda Via. Se uma fatura não
+        // estiver presente naquela tela, PDF e PIX permanecem indisponíveis.
+        function tituloFromHref(href) {
+          try {
+            return new URL(href, window.location.href).searchParams.get('titulo');
+          } catch (error) {
+            return null;
+          }
+        }
+
+        function prepareAction($action, label, extraClasses) {
+          $action
+            .removeClass('h-8 w-8 invoice-action-button invoice-action-print invoice-action-pdf')
+            .addClass('inline-flex h-10 w-10 items-center justify-center rounded transition-all ' + extraClasses)
+            .attr('title', label)
+            .attr('aria-label', label);
+          $action.find('.invoice-action-text').remove();
+          $action.find('i').attr('aria-hidden', 'true');
+          return $action;
+        }
+
+        $.get('./2_via.hhvm').done(function (html) {
+          const parsed = new DOMParser().parseFromString(html, 'text/html');
+          const actionsByTitle = {};
+
+          $(parsed).find('a[href*="prepara_boleto.hhvm?titulo="]').each(function () {
+            const titulo = tituloFromHref($(this).attr('href'));
+            if (!titulo) return;
+
+            const $row = $(this).closest('tr');
+            actionsByTitle[titulo] = {
+              pdf: $(this).clone(),
+              pix: $row.children('td').eq(1).contents().clone()
+            };
+          });
+
+          $('tr[data-fatura-uuid]').each(function () {
+            const $row = $(this);
+            const titulo = $row.attr('data-fatura-uuid');
+            const actions = actionsByTitle[titulo];
+            if (!actions) return;
+
+            const $pdf = prepareAction(
+              actions.pdf,
+              'Abrir boleto em PDF',
+              'dashboard-action-pdf'
+            );
+            $row.find('.js-fatura-pdf').empty().append($pdf);
+
+            const $pixCell = $row.find('.js-fatura-pix').empty().append(actions.pix);
+            const $pixLink = $pixCell.find('a[href*="pay_pix.hhvm?titulo="]');
+            if ($pixLink.length) {
+              prepareAction(
+                $pixLink,
+                'Abrir QR Code e PIX Copia e Cola',
+                'dashboard-action-pix'
+              );
+              $pixLink.find('i').addClass('text-xl');
+            } else if (!$pixCell.text().trim() && !$pixCell.children().length) {
+              $pixCell.html('<span class="inline-flex h-10 w-10 items-center justify-center rounded bg-slate-800 text-slate-600" title="PIX indisponível" aria-label="PIX indisponível"><i class="bi bi-qr-code" aria-hidden="true"></i></span>');
+            }
+          });
+        });
+
         // -- MOBILE MENU (OVERLAY) --
         const $sidebar = $('aside');
         const $mobileBtn = $('#mobile-menu-btn');

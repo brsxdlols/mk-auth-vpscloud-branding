@@ -101,6 +101,166 @@
       html, body {
         overflow-x: hidden;
       }
+
+      .invoice-action-button {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        border: 1px solid transparent;
+      }
+
+      .invoice-action-print {
+        color: #60a5fa !important;
+        background: rgba(59, 130, 246, 0.2) !important;
+        border-color: rgba(59, 130, 246, 0.2) !important;
+      }
+
+      .invoice-action-pdf {
+        color: #fb7185 !important;
+        background: rgba(244, 63, 94, 0.14) !important;
+        border-color: rgba(251, 113, 133, 0.28) !important;
+      }
+
+      .invoice-table td[data-label="PIX"] a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        border: 1px solid rgba(52, 211, 153, 0.28);
+        border-radius: 0.5rem;
+        color: #34d399 !important;
+        background: rgba(16, 185, 129, 0.14) !important;
+        transition: all 0.2s;
+      }
+
+      .invoice-action-print:hover,
+      .invoice-action-print:focus-visible {
+        color: #fff !important;
+        background: #2563eb !important;
+      }
+
+      .invoice-action-pdf:hover,
+      .invoice-action-pdf:focus-visible {
+        color: #fff !important;
+        background: #e11d48 !important;
+      }
+
+      .invoice-table td[data-label="PIX"] a:hover,
+      .invoice-table td[data-label="PIX"] a:focus-visible {
+        color: #fff !important;
+        background: #059669 !important;
+      }
+
+      .invoice-action-text,
+      .invoice-pix-text {
+        display: none;
+      }
+
+      @media (max-width: 639px) {
+        .invoice-table-wrap {
+          overflow-x: visible;
+        }
+
+        .invoice-table,
+        .invoice-table tbody,
+        .invoice-table tr,
+        .invoice-table td {
+          display: block;
+          width: 100%;
+        }
+
+        .invoice-table thead {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
+        .invoice-table tbody {
+          padding: 0.75rem;
+        }
+
+        .invoice-table tbody tr {
+          margin-bottom: 0.75rem;
+          padding: 0.75rem;
+          border: 1px solid rgba(71, 85, 105, 0.7);
+          border-radius: 0.75rem;
+          background: rgba(15, 23, 42, 0.38);
+        }
+
+        .invoice-table tbody tr:last-child {
+          margin-bottom: 0;
+        }
+
+        .invoice-table tbody td {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.55rem 0;
+          text-align: right;
+          border: 0;
+        }
+
+        .invoice-table tbody td::before {
+          content: attr(data-label);
+          flex: 0 0 auto;
+          color: #64748b;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+
+        .invoice-table tbody td[data-label="Descrição"] {
+          align-items: flex-start;
+        }
+
+        .invoice-table tbody td[data-label="Descrição"]::after {
+          content: none;
+        }
+
+        .invoice-table tbody td[data-label="Ações"] {
+          justify-content: flex-start;
+        }
+
+        .invoice-table tbody td[data-label="Ações"]::before {
+          margin-right: auto;
+        }
+
+        .invoice-action-button,
+        .invoice-table td[data-label="PIX"] a {
+          width: auto !important;
+          min-width: 4.75rem;
+          padding: 0.55rem 0.7rem;
+          gap: 0.4rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .invoice-action-text {
+          display: inline;
+        }
+
+        .invoice-table td[data-label="PIX"] a::after {
+          content: "PIX";
+          margin-left: 0.4rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .invoice-description {
+          min-width: 0;
+          overflow-wrap: anywhere;
+          white-space: normal;
+          line-height: 1.35;
+        }
+      }
     </style>
   </head>
   <body
@@ -411,8 +571,8 @@
                   Faturas Disponíveis
                 </h3>
               </div>
-              <div class="overflow-x-auto">
-                <table class="w-full card-table text-left border-collapse">
+              <div class="overflow-x-auto invoice-table-wrap">
+                <table class="w-full card-table invoice-table text-left border-collapse">
                   <thead
                     class="bg-slate-900/50 text-slate-400 text-xs uppercase font-semibold"
                   >
@@ -433,27 +593,29 @@
                     <!-- BEGIN BLOCK_FATURAS -->
                     <!-- BEGIN BLOCK_DADOSFATURAS -->
                     <tr class="hover:bg-slate-700/30 transition-colors">
-                      <td class="p-4 text-center flex justify-center gap-2">
+                      <td class="p-4 text-center flex justify-center gap-2" data-label="Ações">
                         <a
                           href="../boleto/boleto.hhvm?titulo={FATURA_ID}"
                           target="_blank"
                           onClick="window.open(this.href, this.target, 'width=815, height=500, scrollbars=yes'); return false;"
-                          class="h-8 w-8 rounded text-slate-400 hover:bg-slate-700 hover:text-white flex items-center justify-center transition-all bg-slate-800"
-                          title="Imprimir"
+                          class="h-8 w-8 rounded flex items-center justify-center transition-all invoice-action-button invoice-action-print"
+                          title="Imprimir boleto"
+                          aria-label="Imprimir boleto"
                           ><i class="bi bi-printer"></i
-                        ></a>
+                        ><span class="invoice-action-text">Imprimir</span></a>
                         <a
                           href="prepara_boleto.hhvm?titulo={FATURA_UUID}"
                           target="_blank"
                           onClick="window.open(this.href, this.target, 'width=815, height=500, scrollbars=yes'); return false;"
-                          class="h-8 w-8 rounded text-brand-400 hover:bg-brand-500 hover:text-white flex items-center justify-center transition-all bg-slate-800"
+                          class="h-8 w-8 rounded flex items-center justify-center transition-all invoice-action-button invoice-action-pdf"
                           title="Baixar PDF"
+                          aria-label="Baixar boleto em PDF"
                           ><i class="bi bi-file-earmark-pdf"></i
-                        ></a>
+                        ><span class="invoice-action-text">PDF</span></a>
                       </td>
-                      <td class="p-4 text-center">{PAY_PIX}</td>
+                      <td class="p-4 text-center" data-label="PIX">{PAY_PIX}</td>
                       <!-- BEGIN BLOCK_CLIENTECARTAOTR -->
-                      <td class="p-4 text-center">
+                      <td class="p-4 text-center" data-label="Cartão">
                         <a
                           href="prepara_cartao.hhvm?titulo={FATURA_UUID}&idconta={CLIENTE_CONTA_CARTAO}&login={CLIENTE_LOGIN}"
                           target="_blank"
@@ -463,12 +625,13 @@
                         ></a>
                       </td>
                       <!-- END BLOCK_CLIENTECARTAOTR -->
-                      <td class="p-4 font-bold text-white">
+                      <td class="p-4 font-bold text-white" data-label="Valor">
                         R$ {FATURA_VALOR}
                       </td>
-                      <td class="p-4 text-slate-400">{FATURA_VENCIMENTO}</td>
+                      <td class="p-4 text-slate-400" data-label="Vencimento">{FATURA_VENCIMENTO}</td>
                       <td
-                        class="p-4 text-slate-500 text-xs uppercase tracking-wide"
+                        class="p-4 text-slate-500 text-xs uppercase tracking-wide invoice-description"
+                        data-label="Descrição"
                       >
                         {FATURA_DESCRICAO}
                       </td>

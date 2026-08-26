@@ -25,5 +25,10 @@ echo "Baixando identidade MK-AUTH VPS CLOUD..."
 curl -fsSL --retry 3 --connect-timeout 20 "$ARCHIVE_URL" |
   tar -xz -C "$work_dir"
 
-php "$work_dir/mk-auth-vpscloud-branding-main/installer/install.php"
-echo "Instalacao concluida. Atualize a tela de login com Ctrl+F5."
+php "$work_dir/mk-auth-vpscloud-branding-main/installer/install.php" "$@"
+
+if [ "${1:-}" = "--central-only" ]; then
+  echo "Central do Assinante instalada. Atualize a pagina com Ctrl+F5."
+else
+  echo "Instalacao completa concluida. Atualize o login e a Central com Ctrl+F5."
+fi
