@@ -91,7 +91,7 @@ body.vpscloud-login .button.is-primary {
 .vpscloud-hero-brand {
   position: fixed;
   z-index: 1;
-  right: 4vw;
+  right: 1.5vw;
   top: 50%;
   transform: translateY(-54%);
   display: flex;
@@ -100,11 +100,22 @@ body.vpscloud-login .button.is-primary {
   color: #fff;
   text-decoration: none;
   text-align: center;
-  width: 42vw;
+  width: 50vw;
   filter: drop-shadow(0 18px 30px rgba(0, 10, 28, .28));
 }
 
 .vpscloud-hero-brand:hover { color: #fff; }
+
+.vpscloud-network-canvas {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  width: 56vw;
+  height: calc(100vh - 74px);
+  pointer-events: none;
+  opacity: .92;
+}
 
 .vpscloud-cloud-symbol {
   width: 150px;
@@ -124,6 +135,23 @@ body.vpscloud-login .button.is-primary {
 .vpscloud-wordmark {
   font: 800 clamp(42px, 4.4vw, 70px)/.95 Arial, Helvetica, sans-serif;
   letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+body.vpscloud-login .mkalogo a {
+  perspective: 700px;
+}
+
+body.vpscloud-login .mkalogo img {
+  transform: rotateX(var(--vps-logo-rx, 0deg)) rotateY(var(--vps-logo-ry, 0deg)) scale(var(--vps-logo-scale, 1));
+  transform-origin: center;
+  transition: transform .22s ease, filter .22s ease;
+  will-change: transform;
+}
+
+body.vpscloud-login .mkalogo a:hover img {
+  --vps-logo-scale: 1.035;
+  filter: drop-shadow(0 12px 18px rgba(23, 107, 255, .25));
 }
 
 .vpscloud-consulting {
@@ -138,8 +166,8 @@ body.vpscloud-login .button.is-primary {
 
 @media (min-width: 1024px) {
   body.vpscloud-login section .column.is-6.is-offset-3 {
-    width: min(46%, 600px);
-    margin-left: 4vw;
+    width: clamp(420px, 38%, 520px);
+    margin-left: 0;
   }
 }
 
@@ -200,10 +228,18 @@ body.vpscloud-login .navbar {
 }
 
 @media (max-width: 1023px) {
-  .vpscloud-hero-brand { display: none; }
+  .vpscloud-hero-brand,
+  .vpscloud-network-canvas { display: none; }
   body.vpscloud-login section { min-height: 100vh; padding: 90px 16px 120px; }
   body.vpscloud-login .navbar { display: flex !important; }
   body.vpscloud-login .navbar-start { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.vpscloud-login .mkalogo img {
+    transform: none !important;
+    transition: none;
+  }
 }
 
 @media (max-width: 767px) {
