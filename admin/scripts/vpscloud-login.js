@@ -134,6 +134,117 @@
     });
   }
 
+  function enableLogoNetworkAnimation(logoLink) {
+    if (!logoLink || logoLink.querySelector('.vpscloud-logo-network-canvas')) return;
+    var logo = logoLink.querySelector('img');
+    if (!logo) return;
+
+    var canvas = document.createElement('canvas');
+    canvas.className = 'vpscloud-logo-network-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    logoLink.appendChild(canvas);
+
+    var context = canvas.getContext('2d');
+    var animationFrame = 0;
+    var points = [
+      [.26, .33], [.60, .15], [.84, .31],
+      [.49, .61], [.13, .72], [.51, .84]
+    ].map(function (position, index) {
+      return { x: position[0], y: position[1], phase: index * 1.17 };
+    });
+    var links = [
+      [0,1], [0,2], [0,3], [0,4],
+      [1,2], [1,3], [1,4],
+      [2,3], [2,5], [3,4], [3,5], [4,5]
+    ];
+
+    function resize() {
+      var logoWidth = logo.clientWidth;
+      var logoHeight = logo.clientHeight;
+      var size = Math.max(1, logoHeight * .75);
+      var ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.style.left = (logo.offsetLeft + logoWidth * .033) + 'px';
+      canvas.style.top = (logo.offsetTop + logoHeight * .125) + 'px';
+      canvas.style.width = size + 'px';
+      canvas.style.height = size + 'px';
+      canvas.width = Math.round(size * ratio);
+      canvas.height = Math.round(size * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function draw(time) {
+      animationFrame += 1;
+      if (animationFrame % 10 === 0) canvas.dataset.animationFrame = String(animationFrame);
+      var width = canvas.clientWidth;
+      var height = canvas.clientHeight;
+      var seconds = time * .001;
+      var radius = Math.min(width, height) * .465;
+      var centerX = width / 2;
+      var centerY = height / 2;
+
+      context.clearRect(0, 0, width, height);
+      context.beginPath();
+      context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      context.fillStyle = '#ffffff';
+      context.fill();
+      context.lineWidth = Math.max(3, width * .065);
+      context.strokeStyle = '#071c38';
+      context.stroke();
+
+      var innerWidth = width * .73;
+      var innerHeight = height * .67;
+      var offsetX = width * .135;
+      var offsetY = height * .15;
+      var rendered = points.map(function (point, index) {
+        return {
+          x: offsetX + point.x * innerWidth + Math.sin(seconds * 1.16 + point.phase) * width * .052,
+          y: offsetY + point.y * innerHeight + Math.cos(seconds * .98 + point.phase) * height * .052
+        };
+      });
+
+      context.save();
+      context.beginPath();
+      context.arc(centerX, centerY, radius - context.lineWidth, 0, Math.PI * 2);
+      context.clip();
+      context.translate(centerX, centerY);
+      context.rotate(Math.sin(seconds * .72) * .13);
+      context.translate(-centerX, -centerY);
+      context.setLineDash([width * .11, width * .045]);
+      context.lineDashOffset = -seconds * width * .20;
+      context.lineWidth = Math.max(1.2, width * .022);
+      links.forEach(function (link, index) {
+        var start = rendered[link[0]];
+        var end = rendered[link[1]];
+        context.beginPath();
+        context.moveTo(start.x, start.y);
+        context.lineTo(end.x, end.y);
+        context.strokeStyle = index % 2 ? '#176bff' : '#18bfe6';
+        context.stroke();
+      });
+      context.setLineDash([]);
+
+      rendered.forEach(function (point, index) {
+        var pulse = 1 + Math.sin(seconds * 2.2 + index) * .22;
+        context.beginPath();
+        context.arc(point.x, point.y, Math.max(2.3, width * .045) * pulse, 0, Math.PI * 2);
+        context.fillStyle = index % 2 ? '#176bff' : '#18bfe6';
+        context.shadowColor = 'rgba(23, 107, 255, .55)';
+        context.shadowBlur = width * .06;
+        context.fill();
+        context.shadowBlur = 0;
+      });
+      context.restore();
+
+      window.requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(logo);
+    resize();
+    window.requestAnimationFrame(draw);
+  }
+
   function buildFooterLinks() {
     var footer = document.createElement('div');
     footer.className = 'vpscloud-footer-links';
@@ -168,7 +279,7 @@
     var figure = document.querySelector('.mkalogo');
     var legacyLogo = figure ? figure.querySelector('img') : null;
     if (figure && legacyLogo) {
-      legacyLogo.src = 'img/vpscloud-mkauth.svg?v=20260902-1';
+      legacyLogo.src = 'img/vpscloud-mkauth.svg?v=20260902-3';
       legacyLogo.alt = 'MK-AUTH VPS CLOUD';
 
       if (!legacyLogo.parentElement || legacyLogo.parentElement.tagName !== 'A') {
@@ -181,6 +292,7 @@
         logoLink.appendChild(legacyLogo);
       }
       enableLogoMotion(legacyLogo.parentElement);
+      enableLogoNetworkAnimation(legacyLogo.parentElement);
     }
 
     if (!document.querySelector('.vpscloud-hero-brand')) {
