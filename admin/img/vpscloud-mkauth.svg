@@ -14,14 +14,22 @@
   <g transform="translate(8 12)">
     <circle cx="52" cy="52" r="48" fill="url(#ring)"/>
     <circle cx="52" cy="52" r="40" fill="#fff"/>
-    <g transform="translate(20 24) scale(.32)" fill="none" stroke="url(#cloud)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M27 76 37 35 62 57 132 18 184 50 198 113 109 112 114 150 31 132 18 80Z"/>
-      <path d="M37 35 132 18 109 112 31 132 132 18 184 50 114 150 109 112 62 57 31 132"/>
-      <path d="M18 80 62 57 132 18 184 50 109 112M62 57 109 112 184 50"/>
-    </g>
-    <g transform="translate(20 24) scale(.32)" fill="#176bff">
-      <circle cx="62" cy="57" r="15"/><circle cx="132" cy="18" r="15"/><circle cx="184" cy="50" r="15"/>
-      <circle cx="109" cy="112" r="15"/><circle cx="31" cy="132" r="15"/><circle cx="114" cy="150" r="15"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;2 -1;-1 2;1 1;0 0" dur="5.2s" repeatCount="indefinite"/>
+      <g transform="translate(20 24) scale(.32)" fill="none" stroke="url(#cloud)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="18 7">
+        <animate attributeName="stroke-dashoffset" values="0;-50" dur="2.8s" repeatCount="indefinite"/>
+        <path d="M27 76 37 35 62 57 132 18 184 50 198 113 109 112 114 150 31 132 18 80Z"/>
+        <path d="M37 35 132 18 109 112 31 132 132 18 184 50 114 150 109 112 62 57 31 132"/>
+        <path d="M18 80 62 57 132 18 184 50 109 112M62 57 109 112 184 50"/>
+      </g>
+      <g transform="translate(20 24) scale(.32)" fill="#176bff">
+        <circle cx="62" cy="57" r="15"><animate attributeName="r" values="12;18;12" dur="2.4s" repeatCount="indefinite"/></circle>
+        <circle cx="132" cy="18" r="15"><animate attributeName="r" values="15;11;15" dur="2.9s" repeatCount="indefinite"/></circle>
+        <circle cx="184" cy="50" r="15"><animate attributeName="r" values="11;17;11" dur="3.1s" repeatCount="indefinite"/></circle>
+        <circle cx="109" cy="112" r="15"><animate attributeName="r" values="16;12;16" dur="2.6s" repeatCount="indefinite"/></circle>
+        <circle cx="31" cy="132" r="15"><animate attributeName="r" values="12;18;12" dur="3.3s" repeatCount="indefinite"/></circle>
+        <circle cx="114" cy="150" r="15"><animate attributeName="r" values="17;11;17" dur="2.7s" repeatCount="indefinite"/></circle>
+      </g>
     </g>
   </g>
   <g transform="translate(124 25)">

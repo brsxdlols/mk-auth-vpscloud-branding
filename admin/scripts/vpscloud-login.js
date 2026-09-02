@@ -168,7 +168,7 @@
     var figure = document.querySelector('.mkalogo');
     var legacyLogo = figure ? figure.querySelector('img') : null;
     if (figure && legacyLogo) {
-      legacyLogo.src = 'img/vpscloud-mkauth.svg?v=20260801-2';
+      legacyLogo.src = 'img/vpscloud-mkauth.svg?v=20260902-1';
       legacyLogo.alt = 'MK-AUTH VPS CLOUD';
 
       if (!legacyLogo.parentElement || legacyLogo.parentElement.tagName !== 'A') {
