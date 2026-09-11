@@ -269,7 +269,7 @@
     var button = document.createElement('a');
     button.className = 'vpscloud-central-button';
     button.href = '/central';
-    button.innerHTML = '<span aria-hidden="true">☁</span> Central do assinante';
+    button.innerHTML = '<span aria-hidden="true">☁</span> Central do Assinante';
     return button;
   }
 
@@ -310,6 +310,14 @@
     var loginBox = document.querySelector('.box');
     if (loginBox && !document.querySelector('.vpscloud-central-button')) {
       loginBox.appendChild(buildCentralButton());
+    }
+    if (loginBox && !document.querySelector('.vpscloud-hotsite-button')) {
+      var hotsite = document.createElement('a');
+      hotsite.className = 'vpscloud-central-button vpscloud-hotsite-button';
+      hotsite.href = '/';
+      hotsite.innerHTML = '<span aria-hidden="true">&#8962;</span> Hotsite Provedor';
+      var central = loginBox.querySelector('.vpscloud-central-button');
+      loginBox.insertBefore(hotsite, central ? central.nextSibling : null);
     }
     if (loginBox && !document.querySelector('.vpscloud-card-links')) {
       loginBox.appendChild(buildCardLinks());

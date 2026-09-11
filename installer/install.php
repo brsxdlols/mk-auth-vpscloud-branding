@@ -4,8 +4,8 @@ $root = dirname(__DIR__);
 $backupDir = '/opt/mk-auth/backups/vpscloud-branding';
 $mode = $argv[1] ?? '--all';
 
-if (!in_array($mode, ['--all', '--central-only'], true)) {
-    fwrite(STDERR, "Uso: php installer/install.php [--central-only]\n");
+if (!in_array($mode, ['--all', '--central-only', '--login-only'], true)) {
+    fwrite(STDERR, "Uso: php installer/install.php [--central-only|--login-only]\n");
     exit(1);
 }
 
@@ -104,13 +104,13 @@ function installLogin($root, $backupDir)
   if (!document.querySelector('link[data-vpscloud-login]')) {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'estilos/vpscloud-login.css?v=20260902-3';
+    link.href = 'estilos/vpscloud-login.css?v=20260911-1';
     link.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-vpscloud-login]')) {
     var script = document.createElement('script');
-    script.src = 'scripts/vpscloud-login.js?v=20260902-3';
+    script.src = 'scripts/vpscloud-login.js?v=20260911-1';
     script.defer = true;
     script.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(script);
@@ -120,8 +120,8 @@ JS;
         echo "Backup do login criado: $backup\n";
     } else {
         $contents = preg_replace(
-            ['/vpscloud-login\.css\?v=[0-9-]+/', '/vpscloud-login\.js\?v=[0-9-]+/'],
-            ['vpscloud-login.css?v=20260902-3', 'vpscloud-login.js?v=20260902-3'],
+            ['/vpscloud-login\.css\?v=[A-Za-z0-9._-]+/', '/vpscloud-login\.js\?v=[A-Za-z0-9._-]+/'],
+            ['vpscloud-login.css?v=20260911-1', 'vpscloud-login.js?v=20260911-1'],
             $contents
         );
         if ($contents === null) throw new RuntimeException('Falha ao atualizar loader do login.');
@@ -134,7 +134,7 @@ JS;
 }
 
 try {
-    installCentral($root, $backupDir);
+    if ($mode !== '--login-only') installCentral($root, $backupDir);
     if ($mode !== '--central-only') installLogin($root, $backupDir);
 } catch (Throwable $error) {
     fwrite(STDERR, $error->getMessage() . "\n");

@@ -41,7 +41,7 @@ O instalador adiciona um carregador isolado ao final do JavaScript nativo. Ele s
 - link “VPS CLOUD - Network Consulting” para o site da empresa;
 - link “MK-Auth em Cloud”;
 - direitos autorais “Bruno Fontes - Network Consulting”;
-- botão “Central do assinante” apontando para `/central`;
+- botão “Central do Assinante” apontando para `/central`;
 - instalação do tema `abgs_center-2026` na central;
 - seleção automática do tema e autenticação por CPF.
 - adaptação para desktop, tablet e celular.
@@ -91,3 +91,18 @@ mk-auth-vpscloud-branding/
 ```
 
 Nenhuma credencial ou dado de acesso ao ambiente de teste faz parte deste pacote.
+
+## Atualização do login — 11/09/2026
+
+- Botão Hotsite Provedor abre a raiz do domínio do próprio sistema (`/`).
+- Texto Central do Assinante com inicial maiúscula.
+- Botões responsivos e rodapé no fluxo da página em telas menores que 1024 px, evitando sobreposição durante a rolagem.
+- Versão dos assets atualizada para invalidar o cache anterior.
+
+Para instalar ou atualizar somente o login, sem alterar tema e autenticação da Central:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/brsxdlols/mk-auth-vpscloud-branding/main/install.sh | sh -s -- --login-only
+```
+
+O comando completo continua disponível acima. O modo `--central-only` também permanece disponível.

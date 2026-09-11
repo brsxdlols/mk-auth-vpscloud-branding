@@ -29,6 +29,8 @@ php "$work_dir/mk-auth-vpscloud-branding-main/installer/install.php" "$@"
 
 if [ "${1:-}" = "--central-only" ]; then
   echo "Central do Assinante instalada. Atualize a pagina com Ctrl+F5."
+elif [ "${1:-}" = "--login-only" ]; then
+  echo "Login atualizado. Atualize a pagina com Ctrl+F5."
 else
   echo "Instalacao completa concluida. Atualize o login e a Central com Ctrl+F5."
 fi
