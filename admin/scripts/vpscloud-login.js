@@ -330,3 +330,82 @@
     applyIdentity();
   }
 }());
+(function () {
+  'use strict';
+  function setup() {
+    var form = document.getElementById('form');
+    var box = document.querySelector('.box');
+    var enter = document.getElementById('btn_entrar');
+    if (!form || !box || !enter || !window.jQuery || box.querySelector('.vpscloud-access-status')) return;
+    var panel = document.createElement('div');
+    panel.className = 'vpscloud-access-status';
+    panel.hidden = true;
+    panel.setAttribute('role', 'status');
+    panel.setAttribute('aria-live', 'polite');
+    panel.innerHTML = '<span class="vpscloud-access-icon" aria-hidden="true"></span><strong></strong><p></p>';
+    box.appendChild(panel);
+    var original = enter.innerHTML;
+    var busy = false;
+    function status(state, title, message) {
+      panel.hidden = false;
+      panel.dataset.state = state;
+      panel.querySelector('strong').textContent = title;
+      panel.querySelector('p').textContent = message;
+      panel.querySelector('span').textContent = state === 'success' ? '✓' : state === 'error' ? '!' : '';
+      box.classList.toggle('vpscloud-access-checking', state === 'pending');
+      enter.innerHTML = state === 'pending' ? 'Verificando…' : original;
+      enter.disabled = state === 'pending' || state === 'success';
+      box.setAttribute('aria-busy', state === 'pending' ? 'true' : 'false');
+    }
+    function readable(text) {
+      return text.replace(/\\n/g, '\n').replace(/\\r/g, '').replace(/\\(['"\\])/g, '$1').replace(/<[^>]*>/g, '').trim().slice(0, 600);
+    }
+    window.jQuery(form).on('submit.vpscloudFeedback', function (event) {
+      event.preventDefault();
+      if (busy) return;
+      var username = document.getElementById('xxlogin');
+      var password = document.getElementById('xxsenha');
+      if (!username.value.trim() || !password.value) {
+        status('error', 'Confira seus dados', 'Informe o usuário e a senha para entrar.');
+        (!username.value.trim() ? username : password).focus();
+        return;
+      }
+      busy = true;
+      status('pending', 'Verificando seu acesso', 'Aguarde enquanto o MK-Auth confirma seus dados.');
+      var controller = new AbortController();
+      var timeout = window.setTimeout(function () { controller.abort(); }, 30000);
+      fetch(form.action, { method: 'POST', body: new FormData(form), credentials: 'same-origin', signal: controller.signal })
+        .then(function (response) {
+          if (!response.ok) throw new Error('O servidor retornou erro ' + response.status + '. Tente novamente.');
+          return response.text().then(function (html) {
+            var alertMatch = html.match(/\balert\(\s*(['"])((?:\\.|(?!\1)[\s\S])*)\1\s*\)/);
+            if (alertMatch) throw new Error(readable(alertMatch[2]));
+            var parsed = new DOMParser().parseFromString(html, 'text/html');
+            var notice = parsed.querySelector('.notification.is-danger, .notification.is-warning, .alert-danger, [role="alert"]');
+            if (notice) throw new Error(notice.textContent.trim().slice(0, 600));
+            var redirect = html.match(/(?:window\.)?location(?:\.href)?\s*=\s*['"]([^'"]+)['"]/);
+            var destination = new URL(redirect ? redirect[1] : response.url, form.action);
+            if (destination.origin !== location.origin) throw new Error('O sistema solicitou outra etapa de acesso. Atualize a página para continuar.');
+            if (/\/admin\/index\.(?:hhvm|php)$/.test(destination.pathname)) {
+              status('success', 'Acesso autorizado', 'Login confirmado. Abrindo o sistema…');
+              window.setTimeout(function () { location.assign(destination.href); }, 650);
+              return;
+            }
+            throw new Error('Não foi possível confirmar o acesso. Confira os dados ou atualize a página para renovar a sessão.');
+          });
+        })
+        .catch(function (error) {
+          status('error', 'Não foi possível entrar', error.name === 'AbortError' ? 'O servidor demorou para responder. Tente novamente.' : error instanceof TypeError ? 'Falha de conexão. Verifique sua internet e tente novamente.' : error.message);
+          busy = false;
+        })
+        .finally(function () { window.clearTimeout(timeout); });
+    });
+    var clear = document.getElementById('btn_limpar');
+    if (clear) clear.addEventListener('click', function () { if (!busy) panel.hidden = true; });
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) { busy = false; enter.disabled = false; enter.innerHTML = original; panel.hidden = true; box.classList.remove('vpscloud-access-checking'); box.setAttribute('aria-busy', 'false'); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+}());

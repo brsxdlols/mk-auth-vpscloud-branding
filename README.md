@@ -106,3 +106,7 @@ curl -fsSL https://raw.githubusercontent.com/brsxdlols/mk-auth-vpscloud-branding
 ```
 
 O comando completo continua disponível acima. O modo `--central-only` também permanece disponível.
+
+## Interação de acesso — 02/10/2026
+
+O login mostra um indicador azul durante a verificação, confirmação verde ao receber redirecionamento para o painel e aviso vermelho com a mensagem do MK-Auth em caso de erro. O envio preserva os campos e o token preparados pelo login nativo. Em telas pequenas o aviso fica dentro do card. Respostas desconhecidas não são tratadas como sucesso. Atualize com --login-only.

@@ -307,3 +307,37 @@ body.vpscloud-login .navbar {
   outline: 2px solid var(--vps-blue);
   outline-offset: 3px;
 }
+
+/* Login feedback: beside the card on desktop, inside on smaller screens. */
+body.vpscloud-login .box { position: relative; }
+.vpscloud-access-status[hidden] { display: none !important; }
+.vpscloud-access-status {
+  --access-color: #176bff;
+  position: absolute;
+  left: calc(100% + 16px);
+  top: 80px;
+  width: 200px;
+  box-sizing: border-box;
+  padding: 24px 18px;
+  border: 1px solid #d6e1ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(4, 25, 54, .18);
+  text-align: center;
+  color: var(--access-color);
+}
+.vpscloud-access-status[data-state="success"] { --access-color: #16803c; border-color: #95d5ab; background: #f0fff5; }
+.vpscloud-access-status[data-state="error"] { --access-color: #be2535; border-color: #efadb5; background: #fff5f5; }
+.vpscloud-access-status strong { display: block; font-size: 18px; line-height: 1.2; margin: 16px 0 8px; }
+.vpscloud-access-status p { font-size: 13px; line-height: 1.5; color: #526279; white-space: pre-line; overflow-wrap: anywhere; }
+.vpscloud-access-icon { display: inline-flex; justify-content: center; align-items: center; width: 52px; height: 52px; border: 3px solid currentColor; border-radius: 50%; font-size: 30px; font-weight: 700; }
+.vpscloud-access-status[data-state="pending"] .vpscloud-access-icon { border-color: #dce9ff; border-top-color: var(--access-color); animation: vpscloud-access-spin .8s linear infinite; }
+.vpscloud-access-checking .input { animation: vpscloud-access-glow 1.4s ease-in-out infinite alternate; }
+@keyframes vpscloud-access-spin { to { transform: rotate(360deg); } }
+@keyframes vpscloud-access-glow { to { box-shadow: 0 0 0 3px rgba(23,107,255,.13); } }
+@media (max-width: 1279px) {
+  .vpscloud-access-status { position: static; width: 100%; margin-top: 16px; padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vpscloud-access-checking .input, .vpscloud-access-status[data-state="pending"] .vpscloud-access-icon { animation: none; }
+}
