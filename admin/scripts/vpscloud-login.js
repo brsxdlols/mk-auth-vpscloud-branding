@@ -759,9 +759,18 @@
       var boosting = rocket.classList.contains('vpscloud-rocket-boost') || rocket.classList.contains('vpscloud-rocket-launching');
       if (boosting && innerWidth > 1023) {
         var svg = rocket.querySelector('svg');
-        var matrix = svg && svg.getScreenCTM();
-        if (matrix) {
-          var tail = new DOMPoint(10, 32).matrixTransform(matrix);
+        var anchor = svg && svg.querySelector('.vpscloud-smoke-anchor');
+        if (svg && !anchor) {
+          anchor = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          anchor.setAttribute('class', 'vpscloud-smoke-anchor');
+          anchor.setAttribute('cx', '4'); anchor.setAttribute('cy', '32');
+          anchor.setAttribute('r', '.1'); anchor.setAttribute('fill', 'transparent');
+          anchor.setAttribute('pointer-events', 'none');
+          svg.appendChild(anchor);
+        }
+        if (anchor) {
+          var exhaust = anchor.getBoundingClientRect();
+          var tail = { x: exhaust.left + exhaust.width / 2, y: exhaust.top + exhaust.height / 2 };
           var small = rocket.classList.contains('vpscloud-rocket-galaxy');
           emission += dt;
           if (emission >= 24) {
@@ -770,7 +779,7 @@
             var steps = Math.max(1, Math.min(10, Math.ceil(distance / 8)));
             for (var n = 1; n <= steps; n++) {
               var t = n / steps;
-              particles.push({ x: lastPosition ? lastPosition.x + (tail.x - lastPosition.x) * t : tail.x, y: lastPosition ? lastPosition.y + (tail.y - lastPosition.y) * t : tail.y, age: 0, life: 1100 + Math.random() * 350, radius: small ? 2.5 : 5, vx: (Math.random() - .5) * .013, vy: -.008 - Math.random() * .012 });
+              particles.push({ x: lastPosition ? lastPosition.x + (tail.x - lastPosition.x) * t : tail.x, y: lastPosition ? lastPosition.y + (tail.y - lastPosition.y) * t : tail.y, age: 0, life: 1100 + Math.random() * 350, radius: small ? 2.5 : 5, vx: (Math.random() - .5) * .003, vy: (Math.random() - .5) * .003 });
             }
             lastPosition = { x: tail.x, y: tail.y };
           }
