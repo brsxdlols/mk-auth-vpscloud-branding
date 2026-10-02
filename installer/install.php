@@ -83,6 +83,16 @@ function installLogin($root, $backupDir)
         $root . '/admin/estilos/vpscloud-login.css' => $admin . '/estilos/vpscloud-login.css',
         $root . '/admin/scripts/vpscloud-login.js' => $admin . '/scripts/vpscloud-login.js',
     ];
+    $snapshot = $backupDir . '/login-before-' . date('Ymd-His');
+    if (!mkdir($snapshot, 0755, true)) throw new RuntimeException('Falha ao criar backup.');
+    $saveFiles = array_values($files);
+    $saveFiles[] = $nativeJs;
+    $saveFiles[] = $admin . '/.htaccess';
+    $saveFiles[] = '/var/www/vpscloud-auth-prepend.php';
+    foreach ($saveFiles as $existing) {
+        if (is_file($existing) && !copy($existing, $snapshot . '/' . basename($existing))) throw new RuntimeException('Falha ao criar backup de ' . $existing);
+    }
+    echo "Backup do login: $snapshot\n";
     foreach ($files as $source => $destination) {
         if (!is_file($source) || !copy($source, $destination)) {
             throw new RuntimeException("Falha ao instalar $destination.");
@@ -104,13 +114,13 @@ function installLogin($root, $backupDir)
   if (!document.querySelector('link[data-vpscloud-login]')) {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'estilos/vpscloud-login.css?v=20261002-1';
+    link.href = 'estilos/vpscloud-login.css?v=20261002-release2';
     link.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-vpscloud-login]')) {
     var script = document.createElement('script');
-    script.src = 'scripts/vpscloud-login.js?v=20261002-1';
+    script.src = 'scripts/vpscloud-login.js?v=20261002-release2';
     script.defer = true;
     script.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(script);
@@ -121,7 +131,7 @@ JS;
     } else {
         $contents = preg_replace(
             ['/vpscloud-login\.css\?v=[A-Za-z0-9._-]+/', '/vpscloud-login\.js\?v=[A-Za-z0-9._-]+/'],
-            ['vpscloud-login.css?v=20261002-1', 'vpscloud-login.js?v=20261002-1'],
+            ['vpscloud-login.css?v=20261002-release2', 'vpscloud-login.js?v=20261002-release2'],
             $contents
         );
         if ($contents === null) throw new RuntimeException('Falha ao atualizar loader do login.');
@@ -130,6 +140,28 @@ JS;
         throw new RuntimeException('Falha ao instalar loader do login.');
     }
     chmod($nativeJs, 0644);
+    $adapter = '/var/www/vpscloud-auth-prepend.php';
+    if (!copy($root . '/installer/vpscloud-auth-prepend.php', $adapter)) throw new RuntimeException('Falha ao instalar adaptador de login/logout.');
+    chmod($adapter, 0644);
+    $htaccess = $admin . '/.htaccess';
+    $rules = is_file($htaccess) ? file_get_contents($htaccess) : '';
+    if ($rules === false) throw new RuntimeException('Falha ao ler .htaccess.');
+    $rules = preg_replace('~# BEGIN VPSCLOUD AUTH PRESENTATION.*?# END VPSCLOUD AUTH PRESENTATION\s*~s', '', $rules);
+    $rules .= <<<'HTACCESS'
+
+# BEGIN VPSCLOUD AUTH PRESENTATION
+<FilesMatch "^(executar_login|logout)\.hhvm$">
+SetEnv PHP_VALUE "auto_prepend_file=/var/www/vpscloud-auth-prepend.php"
+<IfModule php7_module>
+php_value auto_prepend_file "/var/www/vpscloud-auth-prepend.php"
+</IfModule>
+<IfModule php_module>
+php_value auto_prepend_file "/var/www/vpscloud-auth-prepend.php"
+</IfModule>
+</FilesMatch>
+# END VPSCLOUD AUTH PRESENTATION
+HTACCESS;
+    if (file_put_contents($htaccess, $rules . "\n") === false) throw new RuntimeException('Falha ao configurar login/logout.');
     echo "Identidade do login MK-AUTH VPS CLOUD instalada.\n";
 }
 

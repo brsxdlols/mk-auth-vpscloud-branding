@@ -19,11 +19,7 @@
   <rect width="1920" height="1080" fill="url(#grid)"/>
   <rect width="1920" height="1080" fill="url(#glow)"/>
   <circle cx="1540" cy="390" r="220" fill="#1bd4ef" opacity=".08" filter="url(#blur)"/>
-  <g fill="none" stroke-linecap="round">
-    <path d="M1120 611h524c92 0 166-70 166-157 0-81-65-148-149-156-29-121-142-211-276-211-137 0-252 93-278 219-96 10-171 88-171 183 0 68 39 128 97 158" stroke="#77e5f3" stroke-opacity=".2" stroke-width="7"/>
-    <path d="M1070 795c152-88 275-71 386-7 97 56 200 59 344-35" stroke="#27cce9" stroke-opacity=".16" stroke-width="3"/>
-    <path d="M1070 847c152-88 275-71 386-7 97 56 200 59 344-35" stroke="#4a8fff" stroke-opacity=".12" stroke-width="2"/>
-  </g>
+
   <g stroke="#78e4f1" stroke-opacity=".25" fill="#28cee9">
     <path d="M1110 195 1295 325l195-177 184 154 123-102M1110 195l-86 238 271-108 195 190 184-213 123 181M1024 433l155 224 311-142 219 172" fill="none" stroke-width="2"/>
     <circle cx="1110" cy="195" r="7"/><circle cx="1295" cy="325" r="8"/><circle cx="1490" cy="148" r="7"/><circle cx="1674" cy="302" r="8"/><circle cx="1797" cy="200" r="6"/><circle cx="1024" cy="433" r="8"/><circle cx="1490" cy="515" r="8"/><circle cx="1179" cy="657" r="7"/><circle cx="1709" cy="687" r="7"/>
