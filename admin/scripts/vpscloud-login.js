@@ -574,7 +574,7 @@
         var top = logo ? Math.min(c.top, logo.getBoundingClientRect().top) : c.top;
         var safeTop = Math.max(4, Math.min(12, top - 145));
         var safeLeft = Math.max(12, Math.min(window.innerWidth * .025, c.left - 140));
-        var safeBottom = Math.min(window.innerHeight - 100, Math.max(c.bottom + 50, window.innerHeight - 165));
+        var safeBottom = Math.min(window.innerHeight - 100, Math.max(c.bottom + 35, window.innerHeight - 125));
         rocket.style.setProperty('--rocket-safe-top', safeTop + 'px');
         rocket.style.setProperty('--rocket-safe-left', safeLeft + 'px');
         rocket.style.setProperty('--rocket-safe-bottom', safeBottom + 'px');
