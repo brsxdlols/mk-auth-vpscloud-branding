@@ -580,3 +580,5 @@ body.vpscloud-login section { box-sizing: border-box; min-height: calc(100svh - 
 @media (min-width: 1024px) and (max-height: 800px) {
   .vpscloud-rocket-hint { left: auto !important; right: 28px !important; width: 286px !important; max-width: none !important; display: block; text-align: center !important; transform: none !important; }
 }
+
+@media (min-width: 1280px) { .vpscloud-access-status { top: auto; bottom: 0; } }
