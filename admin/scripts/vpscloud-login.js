@@ -747,9 +747,12 @@
     var particles = [], previous = 0, emission = 0, lastPosition = null;
     function resize() {
       var ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.style.setProperty('width', innerWidth + 'px', 'important');
+      canvas.style.setProperty('height', innerHeight + 'px', 'important');
       canvas.width = Math.round(innerWidth * ratio);
       canvas.height = Math.round(innerHeight * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      var surface = canvas.getBoundingClientRect();
+      ctx.setTransform(canvas.width / surface.width, 0, 0, canvas.height / surface.height, 0, 0);
     }
     resize();
     window.addEventListener('resize', resize, { passive: true });
