@@ -771,6 +771,18 @@
         if (anchor) {
           var exhaust = anchor.getBoundingClientRect();
           var tail = { x: exhaust.left + exhaust.width / 2, y: exhaust.top + exhaust.height / 2 };
+          var bounds = rocket.getBoundingClientRect();
+          var centerX = bounds.left + bounds.width / 2;
+          var centerY = bounds.top + bounds.height / 2;
+          var outerTransform = getComputedStyle(rocket).transform;
+          var innerTransform = getComputedStyle(svg).transform;
+          var outerMatrix = new DOMMatrixReadOnly(outerTransform === 'none' ? undefined : outerTransform);
+          var innerMatrix = new DOMMatrixReadOnly(innerTransform === 'none' ? undefined : innerTransform);
+          var rotation = Math.atan2(outerMatrix.b, outerMatrix.a) + Math.atan2(innerMatrix.b, innerMatrix.a);
+          var axisX = Math.cos(rotation), axisY = Math.sin(rotation);
+          var along = (tail.x - centerX) * axisX + (tail.y - centerY) * axisY;
+          tail.x = centerX + along * axisX;
+          tail.y = centerY + along * axisY;
           var small = rocket.classList.contains('vpscloud-rocket-galaxy');
           emission += dt;
           if (emission >= 24) {
