@@ -422,11 +422,52 @@
     panel.setAttribute('aria-live', 'polite');
     panel.innerHTML = '<span class="vpscloud-access-icon" aria-hidden="true"></span><strong></strong><p></p>';
     box.appendChild(panel);
+    var mobile = window.matchMedia('(max-width: 1023px)');
+    var overlay = document.createElement('div');
+    overlay.className = 'vpscloud-status-modal'; overlay.hidden = true;
+    document.body.appendChild(overlay);
+    var close = document.createElement('button'); close.type = 'button';
+    close.className = 'vpscloud-status-close'; close.textContent = 'Voltar ao login';
+    panel.appendChild(close); close.hidden = true;
+    var dismissTimer, savedScroll = 0, renewLogin = false;
+    function dismiss() {
+      window.clearTimeout(dismissTimer);
+      if (renewLogin) { location.reload(); return; }
+      var restorePosition = !overlay.hidden;
+      overlay.hidden = true; panel.hidden = true;
+      document.body.classList.remove('vpscloud-status-modal-open');
+      if (restorePosition) window.scrollTo(0, savedScroll);
+    }
+    close.addEventListener('click', dismiss);
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && panel.dataset.state === 'error') dismiss();
+    });
+    window.addEventListener('pageshow', function () { dismiss(); });
     var original = enter.innerHTML;
     var busy = false;
     function status(state, title, message) {
+      window.clearTimeout(dismissTimer);
+      if (mobile.matches) {
+        if (overlay.hidden) savedScroll = window.scrollY;
+        overlay.appendChild(panel); overlay.hidden = false;
+        document.body.classList.add('vpscloud-status-modal-open');
+        panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-label', title);
+        var focused = document.activeElement;
+        if (focused && focused.tagName === 'INPUT') focused.blur();
+        close.hidden = state !== 'error';
+        if (state === 'error') {
+
+          dismissTimer = window.setTimeout(dismiss, 4500);
+        }
+      } else {
+        box.appendChild(panel); overlay.hidden = true;
+        document.body.classList.remove('vpscloud-status-modal-open');
+        panel.setAttribute('role', 'status'); panel.removeAttribute('aria-modal'); close.hidden = true;
+      }
       panel.hidden = false;
       panel.dataset.state = state;
+      if (mobile.matches && state === 'error') close.focus({ preventScroll: true });
       panel.querySelector('strong').textContent = title;
       panel.querySelector('p').textContent = message;
       panel.querySelector('span').textContent = state === 'success' ? '✓' : state === 'error' ? '!' : '';
@@ -445,7 +486,7 @@
       var password = document.getElementById('xxsenha');
       if (!username.value.trim() || !password.value) {
         status('error', 'Confira seus dados', 'Informe o usuário e a senha para entrar.');
-        (!username.value.trim() ? username : password).focus();
+        if (!mobile.matches) (!username.value.trim() ? username : password).focus();
         return;
       }
       busy = true;
@@ -468,13 +509,19 @@
           });
         })
         .catch(function (error) {
+          renewLogin = /formul[aá]rio[\s\S]*inv[aá]lido|dados enviados inv[aá]lidos/i.test(error.message || '');
           status('error', 'Não foi possível entrar', error.name === 'AbortError' ? 'O servidor demorou para responder. Tente novamente.' : error instanceof TypeError ? 'Falha de conexão. Verifique sua internet e tente novamente.' : error.message);
           busy = false;
+          if (renewLogin) {
+            panel.querySelector('p').textContent += '\nAtualizando o formulário para confirmar o acesso…';
+            close.hidden = false;
+            dismissTimer = window.setTimeout(dismiss, 2500);
+          }
         })
         .finally(function () { window.clearTimeout(timeout); });
     });
     var clear = document.getElementById('btn_limpar');
-    if (clear) clear.addEventListener('click', function () { if (!busy) panel.hidden = true; });
+    if (clear) clear.addEventListener('click', function () { if (!busy) dismiss(); });
     window.addEventListener('pageshow', function (event) {
       if (event.persisted) { busy = false; enter.disabled = false; enter.innerHTML = original; panel.hidden = true; box.classList.remove('vpscloud-access-checking'); box.setAttribute('aria-busy', 'false'); }
     });

@@ -582,3 +582,11 @@ body.vpscloud-login section { box-sizing: border-box; min-height: calc(100svh - 
 }
 
 @media (min-width: 1280px) { .vpscloud-access-status { top: auto; bottom: 0; } }
+
+.vpscloud-status-modal[hidden], .vpscloud-status-close[hidden] { display: none !important; }
+.vpscloud-status-close { margin-top: 18px; border: 1px solid #d6e1ef; background: #fff; color: #526279; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-weight: 600; }
+@media (max-width: 1023px) {
+  body.vpscloud-status-modal-open { overflow: hidden; }
+  .vpscloud-status-modal { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; padding: 20px; box-sizing: border-box; background: rgba(3,14,31,.65); overscroll-behavior: contain; }
+  .vpscloud-status-modal .vpscloud-access-status { position: relative; left: auto; top: auto; bottom: auto; width: min(340px, 100%); margin: 0; padding: 28px 22px; max-height: calc(100dvh - 40px); overflow: auto; }
+}
