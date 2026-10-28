@@ -23,3 +23,7 @@ O instalador preserva os scripts nativos de autenticação e cria backups em /op
 ## Restaurar
 
 Restaure os arquivos do backup para seus destinos: mk-auth.js e vpscloud-login.js em admin/scripts, vpscloud-login.css em admin/estilos, arquivos SVG em admin/img, .htaccess em admin e vpscloud-auth-prepend.php em /var/www. Caso não existisse adaptador anterior, remova o bloco BEGIN/END VPSCLOUD AUTH PRESENTATION do .htaccess para voltar ao comportamento nativo.
+
+## Mensagens do instalador
+
+Etapas concluidas aparecem em verde com `[OK]`; falhas aparecem em vermelho com `[ERRO]`. A mensagem final de sucesso so aparece se o instalador terminar sem erros. Se uma etapa falhar, as anteriores podem ja ter sido aplicadas; confira a mensagem e o backup indicado. Em logs sem terminal, os rotulos continuam visiveis sem codigos de cor. `NO_COLOR=1` desativa cores; `FORCE_COLOR=1` permite forca-las.

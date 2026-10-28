@@ -1,16 +1,28 @@
 <?php
 
+function installStatus($message, $success = true)
+{
+    $stream = $success ? STDOUT : STDERR;
+    $tty = function_exists('stream_isatty') ? stream_isatty($stream)
+        : (function_exists('posix_isatty') && posix_isatty($stream));
+    $color = getenv('NO_COLOR') === false && (getenv('FORCE_COLOR') === '1'
+        || ($tty && getenv('TERM') !== 'dumb'));
+    $label = $success ? '[OK] ' : '[ERRO] ';
+    $code = $success ? "\033[32m" : "\033[31m";
+    fwrite($stream, ($color ? $code : '') . $label . $message . ($color ? "\033[0m" : '') . "\n");
+}
+
 $root = dirname(__DIR__);
 $backupDir = '/opt/mk-auth/backups/vpscloud-branding';
 $mode = $argv[1] ?? '--all';
 
 if (!in_array($mode, ['--all', '--central-only', '--login-only'], true)) {
-    fwrite(STDERR, "Uso: php installer/install.php [--central-only|--login-only]\n");
+    installStatus("Uso: php installer/install.php [--central-only|--login-only]", false);
     exit(1);
 }
 
 if (!is_dir($backupDir) && !mkdir($backupDir, 0755, true)) {
-    fwrite(STDERR, "Nao foi possivel criar a pasta de backup: $backupDir.\n");
+    installStatus("Nao foi possivel criar a pasta de backup: $backupDir.", false);
     exit(1);
 }
 
@@ -47,7 +59,7 @@ function installCentral($root, $backupDir)
     if (is_dir($destination)) {
         $backup = $backupDir . '/central-abgs_center-2026-before-' . date('Ymd-His');
         copyTree($destination, $backup);
-        echo "Backup da Central criado: $backup\n";
+        installStatus("Backup da Central criado: $backup");
     }
     copyTree($source, $destination);
 
@@ -66,7 +78,7 @@ function installCentral($root, $backupDir)
         if (!$stmt->execute()) throw new RuntimeException('Falha ao salvar configuracao da Central.');
         $stmt->close();
     }
-    echo "Tema abgs_center-2026 instalado, selecionado e configurado para CPF.\n";
+    installStatus("Tema abgs_center-2026 instalado, selecionado e configurado para CPF.");
 }
 
 function installLogin($root, $backupDir)
@@ -92,7 +104,7 @@ function installLogin($root, $backupDir)
     foreach ($saveFiles as $existing) {
         if (is_file($existing) && !copy($existing, $snapshot . '/' . basename($existing))) throw new RuntimeException('Falha ao criar backup de ' . $existing);
     }
-    echo "Backup do login: $snapshot\n";
+    installStatus("Backup do login: $snapshot");
     foreach ($files as $source => $destination) {
         if (!is_file($source) || !copy($source, $destination)) {
             throw new RuntimeException("Falha ao instalar $destination.");
@@ -127,7 +139,7 @@ function installLogin($root, $backupDir)
   }
 }());
 JS;
-        echo "Backup do login criado: $backup\n";
+        installStatus("Backup do login criado: $backup");
     } else {
         $contents = preg_replace(
             ['/vpscloud-login\.css\?v=[A-Za-z0-9._-]+/', '/vpscloud-login\.js\?v=[A-Za-z0-9._-]+/'],
@@ -162,13 +174,13 @@ php_value auto_prepend_file "/var/www/vpscloud-auth-prepend.php"
 # END VPSCLOUD AUTH PRESENTATION
 HTACCESS;
     if (file_put_contents($htaccess, $rules . "\n") === false) throw new RuntimeException('Falha ao configurar login/logout.');
-    echo "Identidade do login MK-AUTH VPS CLOUD instalada.\n";
+    installStatus("Identidade do login MK-AUTH VPS CLOUD instalada.");
 }
 
 try {
     if ($mode !== '--login-only') installCentral($root, $backupDir);
     if ($mode !== '--central-only') installLogin($root, $backupDir);
 } catch (Throwable $error) {
-    fwrite(STDERR, $error->getMessage() . "\n");
+    installStatus($error->getMessage(), false);
     exit(1);
 }
