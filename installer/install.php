@@ -126,13 +126,13 @@ function installLogin($root, $backupDir)
   if (!document.querySelector('link[data-vpscloud-login]')) {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'estilos/vpscloud-login.css?v=20261112-mobilefit4';
+    link.href = 'estilos/vpscloud-login.css?v=20261112-readable5';
     link.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(link);
   }
   if (!document.querySelector('script[data-vpscloud-login]')) {
     var script = document.createElement('script');
-    script.src = 'scripts/vpscloud-login.js?v=20261112-mobilefit4';
+    script.src = 'scripts/vpscloud-login.js?v=20261112-readable5';
     script.defer = true;
     script.setAttribute('data-vpscloud-login', 'true');
     document.head.appendChild(script);
@@ -143,7 +143,7 @@ JS;
     } else {
         $contents = preg_replace(
             ['/vpscloud-login\.css\?v=[A-Za-z0-9._-]+/', '/vpscloud-login\.js\?v=[A-Za-z0-9._-]+/'],
-            ['vpscloud-login.css?v=20261112-mobilefit4', 'vpscloud-login.js?v=20261112-mobilefit4'],
+            ['vpscloud-login.css?v=20261112-readable5', 'vpscloud-login.js?v=20261112-readable5'],
             $contents
         );
         if ($contents === null) throw new RuntimeException('Falha ao atualizar loader do login.');

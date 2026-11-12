@@ -33,3 +33,5 @@ Etapas concluidas aparecem em verde com `[OK]`; falhas aparecem em vermelho com 
 A versao `20261112-mobilefooter1` compacta os espacamentos do login ate 767px e aproxima a tarja original do provedor do formulario, sem nome abaixo do logo e sem rodape fixo sobre o card. No celular, os links VPS CLOUD continuam dentro do card e nao se repetem na tarja. Telas muito baixas ou teclado aberto continuam permitindo rolagem. Desktop preservado.
 
 A versao `20261112-mobilefit4` remove a barra de rolagem forcada pelo CSS nativo quando o conteudo cabe, zera as margens extras da identificacao no rodape e compacta telas de celular com ate 700px de altura. Nao oculta controles nem bloqueia a rolagem necessaria com teclado aberto, zoom ou tela muito baixa.
+
+A versao `20261112-readable5` aumenta a legibilidade dos links, direitos autorais e tarja do provedor no celular, mantendo os links centralizados e o rodape no fim da tela.
