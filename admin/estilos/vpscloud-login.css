@@ -590,3 +590,31 @@ body.vpscloud-login section { box-sizing: border-box; min-height: calc(100svh - 
   .vpscloud-status-modal { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; padding: 20px; box-sizing: border-box; background: rgba(3,14,31,.65); overscroll-behavior: contain; }
   .vpscloud-status-modal .vpscloud-access-status { position: relative; left: auto; top: auto; bottom: auto; width: min(340px, 100%); margin: 0; padding: 28px 22px; max-height: calc(100dvh - 40px); overflow: auto; }
 }
+
+/* Mobile: bring the original provider strip into view without covering the form. */
+@media (max-width: 767px) {
+  body.vpscloud-login section {
+    min-height: auto !important;
+    padding: 66px 12px 8px;
+  }
+  body.vpscloud-login .box { padding: 20px 16px 14px; }
+  body.vpscloud-login .mkalogo { margin-top: -62px; padding-bottom: 12px; }
+  body.vpscloud-login .mkalogo a { width: 220px; max-width: 100%; padding: 8px 12px; }
+  body.vpscloud-login .box .field { margin-bottom: 8px; }
+  body.vpscloud-login .input { height: 36px; min-height: 36px; font-size: 16px; }
+  body.vpscloud-login #btn_entrar, body.vpscloud-login #btn_limpar { min-height: 36px; height: 36px; }
+  body.vpscloud-login .box .field[id$="-HUMAN"] > div:not(.invisivel) { padding: 7px 10px; }
+  body.vpscloud-login .vpscloud-central-button { min-height: 36px; margin-top: 8px; padding: 7px 10px; }
+  body.vpscloud-login .vpscloud-card-links { margin-top: 12px; padding-top: 10px; gap: 6px; }
+  body.vpscloud-login .vpscloud-card-links a { padding: 7px 8px; }
+  body.vpscloud-login .navbar {
+    position: static !important;
+    inset: auto !important;
+    min-height: 0;
+    margin-top: 0;
+  }
+  body.vpscloud-login .navbar-start { width: 100%; }
+  body.vpscloud-login .navbar-start > .navbar-item { padding: 8px 16px; }
+  /* These same links already appear inside the mobile card. */
+  body.vpscloud-login .navbar .vpscloud-footer-links { display: none; }
+}

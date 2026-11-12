@@ -27,3 +27,7 @@ Restaure os arquivos do backup para seus destinos: mk-auth.js e vpscloud-login.j
 ## Mensagens do instalador
 
 Etapas concluidas aparecem em verde com `[OK]`; falhas aparecem em vermelho com `[ERRO]`. A mensagem final de sucesso so aparece se o instalador terminar sem erros. Se uma etapa falhar, as anteriores podem ja ter sido aplicadas; confira a mensagem e o backup indicado. Em logs sem terminal, os rotulos continuam visiveis sem codigos de cor. `NO_COLOR=1` desativa cores; `FORCE_COLOR=1` permite forca-las.
+
+## Rodape no celular
+
+A versao `20261112-mobilefooter1` compacta os espacamentos do login ate 767px e aproxima a tarja original do provedor do formulario, sem nome abaixo do logo e sem rodape fixo sobre o card. No celular, os links VPS CLOUD continuam dentro do card e nao se repetem na tarja. Telas muito baixas ou teclado aberto continuam permitindo rolagem. Desktop preservado.
