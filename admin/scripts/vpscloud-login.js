@@ -352,6 +352,7 @@
   }
 
   function applyIdentity() {
+    document.documentElement.classList.add('vpscloud-login-page');
     document.body.classList.add('vpscloud-login');
 
     var figure = document.querySelector('.mkalogo');
