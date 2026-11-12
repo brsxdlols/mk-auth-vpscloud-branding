@@ -351,6 +351,24 @@
     return button;
   }
 
+  function buildProviderName() {
+    var source = document.querySelector('.navbar .navbar-start .navbar-item p');
+    var name = '';
+    if (source) {
+      for (var index = 0; index < source.childNodes.length; index++) {
+        var node = source.childNodes[index];
+        if (node.nodeName === 'BR') break;
+        name += node.textContent || '';
+      }
+    }
+    name = (name.trim() || document.title.trim()).replace(/\s+/g, ' ');
+    if (!name) return null;
+    var label = document.createElement('p');
+    label.className = 'vpscloud-provider-name';
+    label.textContent = name;
+    return label;
+  }
+
   function applyIdentity() {
     document.body.classList.add('vpscloud-login');
 
@@ -386,6 +404,13 @@
     }
 
     var loginBox = document.querySelector('.box');
+    if (loginBox && !loginBox.querySelector('.vpscloud-provider-name')) {
+      var providerName = buildProviderName();
+      if (providerName) {
+        var providerLogo = loginBox.querySelector('.mkalogo');
+        loginBox.insertBefore(providerName, providerLogo ? providerLogo.nextSibling : loginBox.firstChild);
+      }
+    }
     if (loginBox && !document.querySelector('.vpscloud-central-button')) {
       loginBox.appendChild(buildCentralButton());
     }

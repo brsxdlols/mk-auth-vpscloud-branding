@@ -27,3 +27,7 @@ Restaure os arquivos do backup para seus destinos: mk-auth.js e vpscloud-login.j
 ## Mensagens do instalador
 
 Etapas concluidas aparecem em verde com `[OK]`; falhas aparecem em vermelho com `[ERRO]`. A mensagem final de sucesso so aparece se o instalador terminar sem erros. Se uma etapa falhar, as anteriores podem ja ter sido aplicadas; confira a mensagem e o backup indicado. Em logs sem terminal, os rotulos continuam visiveis sem codigos de cor. `NO_COLOR=1` desativa cores; `FORCE_COLOR=1` permite forca-las.
+
+## Nome do provedor no login
+
+A versao `20261112-provider1` mostra o nome do provedor abaixo do logo, dentro do card, em celular e desktop, inclusive ao alterar o zoom. O texto vem da identificacao nativa do rodape do MK-Auth, com o titulo da pagina como alternativa. Nomes longos quebram linha. Atualize com `--login-only` e Ctrl+F5.

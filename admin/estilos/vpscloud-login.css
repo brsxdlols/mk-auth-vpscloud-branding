@@ -590,3 +590,15 @@ body.vpscloud-login section { box-sizing: border-box; min-height: calc(100svh - 
   .vpscloud-status-modal { position: fixed; inset: 0; z-index: 100000; display: grid; place-items: center; padding: 20px; box-sizing: border-box; background: rgba(3,14,31,.65); overscroll-behavior: contain; }
   .vpscloud-status-modal .vpscloud-access-status { position: relative; left: auto; top: auto; bottom: auto; width: min(340px, 100%); margin: 0; padding: 28px 22px; max-height: calc(100dvh - 40px); overflow: auto; }
 }
+
+/* Keep the native provider identity visible even when the footer is off screen. */
+body.vpscloud-login .vpscloud-provider-name {
+  display: block;
+  max-width: 100%;
+  margin: 0 0 18px;
+  color: var(--vps-navy);
+  font: 700 clamp(13px, 1.1vw, 16px)/1.4 Arial, Helvetica, sans-serif;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
